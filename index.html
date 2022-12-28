@@ -23,16 +23,17 @@
         <button onclick=signIn()>Get started!</button>
     </div>
     
-    <div id="app">
+    <div id="app" class="align-items">
         <button onclick=signOut()>sign out</button>
         <h1 id="title">app</h1>
         <button onclick=window.localStorage.clear()>get user</button>
 
-        <div id="currently-playing">
+        <div id="currently-playing" class="align-items flex-direction">
             <img id="current-image" src="" alt="album cover">
             <div id="current-details">
-                <div>
+                <div id="current-words">
                     <span id="current-track">track</span>
+                    <span><br></span>
                     <span id="current-artist">artist</span>
                 </div>
                 

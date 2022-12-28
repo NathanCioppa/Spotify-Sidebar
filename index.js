@@ -80,14 +80,17 @@ async function signIn() {
 }
 
 async function getCurrent() {
-    const data = await get('https://api.spotify.com/v1/me/player/currently-playing')
     const playing = await get('https://api.spotify.com/v1/me/player')
+    if(playing.is_playing) {
+        info.playback.playing = true
+        const data = await get('https://api.spotify.com/v1/me/player/currently-playing')
 
-    info.current.data = data
-    info.current.track = data.item.name
-    info.current.artist = data.item.artists[0].name
-    info.current.cover = data.item.album.images[1].url
-    playing.is_playing ? info.playback.playing = true : info.playback.playing = false
+        info.current.data = data
+        info.current.track = data.item.name
+        info.current.artist = data.item.artists[0].name
+        info.current.cover = data.item.album.images[1].url
+
+    } else {info.playback.playing = false}
 
     reloadContents()
 }
@@ -95,7 +98,6 @@ setInterval(getCurrent, 1000)
 
 async function getQueue() {
     const data = await get('https://api.spotify.com/v1/me/player/queue')
-    console.log(data)
 }
 
 async function next() {
@@ -123,6 +125,7 @@ async function pause() {
             'Authorization' : 'Bearer ' + token}
     })
     info.playback.playing = false
+    reloadContents()
     } catch (error) {
         console.log('error pause')
     }
@@ -136,6 +139,7 @@ async function resume() {
             'Authorization' : 'Bearer ' + token}
     })
     info.playback.playing = true
+    reloadContents()
     } catch (error) {
         console.log('error resume')
     }

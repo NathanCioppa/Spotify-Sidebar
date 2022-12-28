@@ -1,15 +1,15 @@
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-family: Arial, Helvetica, sans-serif;
     overflow: hidden;
+    color: white;
+    background-color: rgb(20, 20, 20);
 }
 button:hover{
     cursor: pointer;
-}
-button:active{
-    background-color: aqua;
 }
 #sign-in {
     display: flex;
@@ -20,6 +20,13 @@ button:active{
 div {
     display: flex;
     flex-direction: column;
+}
+
+.align-items{
+    align-items: flex-start;
+}
+.flex-direction{
+    flex-direction: row;
 }
 #app {
     display: none;
@@ -32,10 +39,9 @@ div {
 }
 #currently-playing {
     position: absolute;
-    align-items: flex-start;
-    flex-direction: row;
     bottom: 1vh;
 }
+
 #current-image{
     width: 25vh;
     height: 25vh;
@@ -46,6 +52,9 @@ div {
     height: 25vh;
     width: 25vh;
     justify-content:space-between ;
+}
+#current-words{
+    padding-left: 1vh;
 }
 #playback{
     flex-direction: row;
@@ -61,6 +70,9 @@ div {
     border: none;
     border-radius: 500px;
     background-color: rgb(75, 255, 75);
+}
+.playback-button:active{
+    background-color: rgba(75, 255, 75, 0.5)
 }
 
 .playback-icon{
