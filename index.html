@@ -7,7 +7,7 @@
     <title>Spotify Sidebar</title>
     <script src="index.js" ></script>
     <link rel="stylesheet" type="text/css" href="style.css">
-</head>
+    <script src="https://kit.fontawesome.com/066ac1bd3b.js" crossorigin="anonymous"></script></head>
 <body onload=pageLoad()>
     <!--scopes: (add to end of link if more scopes are needed)
         user-read-private user-read-email playlist-read-private 
@@ -31,12 +31,15 @@
         <div id="currently-playing">
             <img id="current-image" src="" alt="album cover">
             <div id="current-details">
-                <span id="current-track">track</span>
-                <span id="current-artist">artist</span>
+                <div>
+                    <span id="current-track">track</span>
+                    <span id="current-artist">artist</span>
+                </div>
+                
                 <div id="playback">
-                    <button onclick=previous() value=>back</button>
-                    <button onclick=pauseResume() value=>pause</button>
-                    <button onclick=next() value=>forward</button>
+                    <button class="playback-button" onclick=previous()><i class="fa-solid fa-backward-step playback-icon"></i></button>
+                    <button class="playback-button" onclick=pauseResume()><i id="play-icon" class="fa-solid fa-play playback-icon"></i></button>
+                    <button class="playback-button" onclick=next()><i class="fa-solid fa-forward-step playback-icon"></i></button>
                 </div>
             </div>
             

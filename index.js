@@ -8,6 +8,10 @@ let info = {
         track: '',
         artist: '',
         cover: ''
+    },
+    playback: {
+        data: '',
+        playing: ''
     }
 }
 
@@ -62,6 +66,10 @@ async function signIn() {
         token = inputToken
         info.user = data
         window.localStorage.setItem('token', token)
+
+        const playing = await get('https://api.spotify.com/v1/me/player')
+        playing.is_playing ? info.playback.playing = true : info.playback.playing = false
+
         getCurrent()
         showContent()
         
@@ -73,11 +81,15 @@ async function signIn() {
 
 async function getCurrent() {
     const data = await get('https://api.spotify.com/v1/me/player/currently-playing')
+    const playing = await get('https://api.spotify.com/v1/me/player')
 
     info.current.data = data
     info.current.track = data.item.name
     info.current.artist = data.item.artists[0].name
     info.current.cover = data.item.album.images[1].url
+    playing.is_playing ? info.playback.playing = true : info.playback.playing = false
+
+    reloadContents()
 }
 setInterval(getCurrent, 1000)
 
@@ -100,7 +112,7 @@ async function previous() {
 
 async function pauseResume() {
     const data = await get('https://api.spotify.com/v1/me/player')
-    data ? pause() : pauseResume()
+    data.is_playing ? pause() : resume()
 }
 
 async function pause() {
@@ -110,6 +122,7 @@ async function pause() {
         headers: {
             'Authorization' : 'Bearer ' + token}
     })
+    info.playback.playing = false
     } catch (error) {
         console.log('error pause')
     }
@@ -122,6 +135,7 @@ async function resume() {
         headers: {
             'Authorization' : 'Bearer ' + token}
     })
+    info.playback.playing = true
     } catch (error) {
         console.log('error resume')
     }
@@ -131,8 +145,9 @@ function reloadContents() {
     elem('current-track').innerText = info.current.track
     elem('current-image').src = info.current.cover
     elem('current-artist').innerText = info.current.artist
+    elem('play-icon').className = info.playback.playing ? 'fa-solid fa-pause playback-icon' : 'fa-solid fa-play playback-icon'
 }
-setInterval(reloadContents, 1000)
+//setInterval(reloadContents, 1000)
 
 async function showContent() {
     elem('title').innerText=info.user.display_name
