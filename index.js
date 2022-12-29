@@ -7,7 +7,10 @@ let info = {
         data: '',
         track: '',
         artist: '',
-        cover: ''
+        cover: '',
+        link: '',
+        position: '',
+        length: ''
     },
     playback: {
         data: '',
@@ -89,8 +92,13 @@ async function getCurrent() {
         info.current.track = data.item.name
         info.current.artist = data.item.artists[0].name
         info.current.cover = data.item.album.images[1].url
+        info.current.link = data.item.external_urls.spotify
+        info.current.length = data.item.duration_ms
+        info.current.position = data.progress_ms
 
     } else {info.playback.playing = false}
+
+    
 
     reloadContents()
 }
@@ -145,13 +153,33 @@ async function resume() {
     }
 }
 
+function progressBar() {
+    const c = document.querySelector('#progress-bar').getContext('2d')
+    const width = elem('progress-bar').clientWidth
+    const height = elem('progress-bar').clientHeight
+    elem('progress-bar').height = height
+    const colWidth = Math.floor(width/100)
+    const progress = Math.floor(((info.current.position/info.current.length)*100)*colWidth)
+    //console.log(width, colWidth, progress)
+
+    c.beginPath()
+    c.clearRect(0,0,width, height)
+    c.fillStyle='white'
+    c.fillRect(0,0,progress,height)
+    c.stroke()
+    
+    
+}
+
 function reloadContents() {
-    elem('current-track').innerText = info.current.track
+    elem('current-track').innerText = info.current.track.length > 25 ? info.current.track.slice(0,25) + '...' : info.current.track
+    elem('current-track').title = info.current.track
+    elem('current-link').href = info.current.link
     elem('current-image').src = info.current.cover
     elem('current-artist').innerText = info.current.artist
     elem('play-icon').className = info.playback.playing ? 'fa-solid fa-pause playback-icon' : 'fa-solid fa-play playback-icon'
+    progressBar()
 }
-//setInterval(reloadContents, 1000)
 
 async function showContent() {
     elem('title').innerText=info.user.display_name

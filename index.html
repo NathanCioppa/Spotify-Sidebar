@@ -28,23 +28,28 @@
         <h1 id="title">app</h1>
         <button onclick=window.localStorage.clear()>get user</button>
 
-        <div id="currently-playing" class="align-items flex-direction">
-            <img id="current-image" src="" alt="album cover">
-            <div id="current-details">
-                <div id="current-words">
-                    <span id="current-track">track</span>
-                    <span><br></span>
-                    <span id="current-artist">artist</span>
-                </div>
-                
-                <div id="playback">
-                    <button class="playback-button" onclick=previous()><i class="fa-solid fa-backward-step playback-icon"></i></button>
-                    <button class="playback-button" onclick=pauseResume()><i id="play-icon" class="fa-solid fa-play playback-icon"></i></button>
-                    <button class="playback-button" onclick=next()><i class="fa-solid fa-forward-step playback-icon"></i></button>
+
+            <div id="currently-playing" >
+                <div class="align-items flex-direction">
+                <a id="current-link" title="Click to view track on Spotify" href=""><img id="current-image" src="" alt="album cover"></a>
+
+                <div id="current-details">
+                    <div id="current-words">
+                        <span id="current-track" title="" >track</span>
+                        <span id="current-artist">artist</span>
+                    </div>
+
+                    <div id="playback">
+                        <button class="playback-button" onclick=previous()><i class="fa-solid fa-backward-step playback-icon"></i></button>
+                        <button class="playback-button" onclick=pauseResume()><i id="play-icon" class="fa-solid fa-play playback-icon"></i></button>
+                        <button class="playback-button" onclick=next()><i class="fa-solid fa-forward-step playback-icon"></i></button>
+                    </div>
                 </div>
             </div>
-            
-        </div>
+            <canvas id="progress-bar"></canvas>
+
+            </div>
+        
 
     </div>
 
