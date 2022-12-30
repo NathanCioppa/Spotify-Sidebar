@@ -53,7 +53,7 @@ function pageLoad() {
     if(storedToken !== null) {
         document.getElementById('token-input').value = storedToken
         signIn()
-    }  
+    }
 }
 
 async function signIn() {
@@ -78,6 +78,8 @@ async function signIn() {
         
     } else {
         console.log('invalid access token')
+        window.localStorage.removeItem('token')
+        elem('token-input').value = ''
     }
 
 }
@@ -94,7 +96,7 @@ async function getCurrent() {
         info.current.cover = data.item.album.images[1].url
         info.current.link = data.item.external_urls.spotify
         info.current.length = data.item.duration_ms
-        info.current.position = data.progress_ms
+        info.current.position = data.progress_ms        
 
     } else {info.playback.playing = false}
 
@@ -156,11 +158,11 @@ async function resume() {
 function progressBar() {
     const c = document.querySelector('#progress-bar').getContext('2d')
     const width = elem('progress-bar').clientWidth
+    elem('progress-bar').width=width
     const height = elem('progress-bar').clientHeight
     elem('progress-bar').height = height
-    const colWidth = Math.floor(width/100)
-    const progress = Math.floor(((info.current.position/info.current.length)*100)*colWidth)
-    //console.log(width, colWidth, progress)
+    const colWidth = width/100
+    const progress = Math.floor(((info.current.position/info.current.length)*100))*colWidth
 
     c.beginPath()
     c.clearRect(0,0,width, height)
@@ -189,6 +191,19 @@ async function showContent() {
 }
 
 function signOut() {
+    document.getElementById('token-input').value = ''
+    window.localStorage.removeItem('token')
     elem('app').style.display='none'
     elem('sign-in').style.display='flex'
+    
+}
+
+function swichAlign() {
+    let items = document.getElementsByClassName('align-items')
+
+    for (let i = 0; i < items.length; i++) {
+        const align = items[i].style.alignItems
+        
+        items[i].style.alignItems = align === 'flex-end' ? 'flex-start' : 'flex-end'
+    }
 }
