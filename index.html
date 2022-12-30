@@ -24,14 +24,16 @@
     </div>
     
     <div id="app" class="align-items">
+        <div style="flex-direction: row;">
+        <button onclick=window.localStorage.clear()>clear storage</button>
+        <button onclick=switchAlign()>switch</button>
+        <button onclick=switchFlexDirection()>switch</button>
         <button onclick=signOut()>sign out</button>
-        <h1 id="title">app</h1>
-        <button onclick=window.localStorage.clear()>get user</button>
-        <button onclick=swichAlign()>switch</button>
-
-
+        </div>
+        
+        <span class="welcome" id="greeting">Welcome</span><span class="welcome" id="name">User</span>
             <div id="currently-playing" >
-                <div class="align-items flex-direction">
+                <div class="flex-direction">
                 <a id="current-link" title="Click to view track on Spotify" href=""><img id="current-image" src="" alt="album cover"></a>
 
                 <div id="current-details">

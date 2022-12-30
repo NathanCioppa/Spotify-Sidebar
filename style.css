@@ -22,7 +22,10 @@ div {
     display: flex;
     flex-direction: column;
 }
-
+.welcome{
+    font-size: 4vh;
+    font-weight: bold;
+}
 .align-items{
     align-items: flex-start;
 }
@@ -57,7 +60,7 @@ div {
 #current-words{
     margin-left: 1vh;
     padding: 1vh;
-    padding-right: none;
+    padding-right: 0;
     margin-bottom: 1vh;
     justify-content: space-between;
     height: 19vh;

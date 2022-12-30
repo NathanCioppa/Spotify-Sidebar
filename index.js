@@ -100,8 +100,6 @@ async function getCurrent() {
 
     } else {info.playback.playing = false}
 
-    
-
     reloadContents()
 }
 setInterval(getCurrent, 1000)
@@ -173,7 +171,13 @@ function progressBar() {
     
 }
 
+function getGreeting() {
+    const hour = new Date().getHours()
+    return hour < 5 ? 'evening' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening'
+}
+
 function reloadContents() {
+    elem('greeting').innerText = 'Good '+getGreeting()+','
     elem('current-track').innerText = info.current.track.length > 25 ? info.current.track.slice(0,25) + '...' : info.current.track
     elem('current-track').title = info.current.track
     elem('current-link').href = info.current.link
@@ -184,7 +188,7 @@ function reloadContents() {
 }
 
 async function showContent() {
-    elem('title').innerText=info.user.display_name
+    elem('name').innerText=info.user.display_name
     await getQueue()
     elem('app').style.display='flex'
     elem('sign-in').style.display='none'
@@ -198,12 +202,21 @@ function signOut() {
     
 }
 
-function swichAlign() {
-    let items = document.getElementsByClassName('align-items')
+function switchAlign() {
+    const items = document.getElementsByClassName('align-items')
 
     for (let i = 0; i < items.length; i++) {
         const align = items[i].style.alignItems
         
         items[i].style.alignItems = align === 'flex-end' ? 'flex-start' : 'flex-end'
+    }
+}
+
+function switchFlexDirection() {
+    const items = document.getElementsByClassName('flex-direction')
+
+    for(let i = 0; i< items.length; i++) {
+        const direction = items[i].style.flexDirection
+        items[i].style.flexDirection = direction === 'row-reverse' ? 'row' : 'row-reverse'
     }
 }
