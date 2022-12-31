@@ -8,7 +8,7 @@
     <script src="index.js" ></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://kit.fontawesome.com/066ac1bd3b.js" crossorigin="anonymous"></script></head>
-<body onload=pageLoad()>
+<body class="align-items" onload=pageLoad()>
     <!--scopes: (add to end of link if more scopes are needed)
         user-read-private user-read-email playlist-read-private 
         playlist-modify-public playlist-modify-private user-read-currently-playing
@@ -23,25 +23,40 @@
         <button onclick=signIn()>Get started!</button>
     </div>
     
-    <div id="app" class="align-items">
-        <div style="flex-direction: row;">
-        <button onclick=window.localStorage.clear()>clear storage</button>
-        <button onclick=switchAlign()>switch</button>
-        <button onclick=switchFlexDirection()>switch</button>
-        <button onclick=signOut()>sign out</button>
+    <div style="flex-direction: row; position: fixed;">
+            <button onclick=window.localStorage.clear()>clear storage</button>
+            <button onclick=switchAlign()>switch</button>
+            <button onclick=switchFlexDirection()>switch</button>
+            <button onclick=signOut()>sign out</button>
         </div>
-        
-        <span class="welcome" id="greeting">Welcome</span><span class="welcome" id="name">User</span>
-            <div id="currently-playing" >
-                <div class="flex-direction">
-                <a id="current-link" title="Click to view track on Spotify" href=""><img id="current-image" src="" alt="album cover"></a>
+    
+    <div id="app" class="align-items">
 
+        
+        <div>
+            <span class="welcome" id="greeting">Welcome</span>
+            <span class="welcome" id="name">User</span>
+        </div>
+        <div id="actions">
+            <div id="nav-bar">
+                <button class="nav-button"><i id="nav-bar-home" class="fa-solid fa-house icon nav-icon"></i></button>
+                <button class="nav-button"><i id="nav-bar-playlists" class="fa-solid fa-music icon nav-icon"></i></button>
+                <button class="nav-button"><i id="nav-bar-search" class="fa-solid fa-magnifying-glass icon nav-icon"></i></button>
+                <button class="nav-button"><i id="nav-bar-switch" class="fa-solid fa-arrow-right-arrow-left icon nav-icon"></i></button>
+                <button class="nav-button"><i id="nav-bar-settings" class="fa-solid fa-gears icon nav-icon"></i></button>
+            </div>
+            <div id="view">
+
+            </div>
+        </div>
+        <div id="currently-playing" >
+            <div class="flex-direction">     
+            <a id="current-link" title="Click to view track on Spotify" href=""><img id="current-image" src="" alt="album cover"></a>
                 <div id="current-details">
                     <div id="current-words">
                         <span id="current-track" title="" >track</span>
                         <span id="current-artist">artist</span>
                     </div>
-
                     <div id="playback">
                         <button class="playback-button" onclick=previous()><i class="fa-solid fa-backward-step playback-icon"></i></button>
                         <button class="playback-button" onclick=pauseResume()><i id="play-icon" class="fa-solid fa-play playback-icon"></i></button>
@@ -50,10 +65,8 @@
                 </div>
             </div>
             <canvas id="progress-bar"></canvas>
-
-            </div>
+        </div>
         
-
     </div>
 
 </body>

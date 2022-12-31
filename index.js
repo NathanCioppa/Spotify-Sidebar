@@ -203,13 +203,7 @@ function signOut() {
 }
 
 function switchAlign() {
-    const items = document.getElementsByClassName('align-items')
-
-    for (let i = 0; i < items.length; i++) {
-        const align = items[i].style.alignItems
-        
-        items[i].style.alignItems = align === 'flex-end' ? 'flex-start' : 'flex-end'
-    }
+    document.body.style.alignItems = document.body.style.alignItems === 'flex-end' ? 'flex-start' : 'flex-end'
 }
 
 function switchFlexDirection() {
@@ -219,4 +213,5 @@ function switchFlexDirection() {
         const direction = items[i].style.flexDirection
         items[i].style.flexDirection = direction === 'row-reverse' ? 'row' : 'row-reverse'
     }
+    elem('current-words').style.marginLeft = items[0].style.flexDirection === 'row-reverse' ? '0' : '1vh'
 }

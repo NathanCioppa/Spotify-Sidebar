@@ -2,12 +2,12 @@
 body {
     display: flex;
     flex-direction: column;
-    align-items: center;
     font-family: Arial, Helvetica, sans-serif;
     overflow: hidden;
     color: white;
     background-color: rgb(20, 20, 20);
     background-image: linear-gradient(to right, rgb(20, 20, 20), rgba(75, 225, 75, 0.2));
+    margin: 2vh;
 }
 button:hover{
     cursor: pointer;
@@ -17,6 +17,10 @@ button:hover{
     flex-direction: column;
     align-items: center;
     text-align: center;
+    position: fixed;
+    left: 50%;
+    top: 10%;
+    transform: translate(-50%);
 }
 div {
     display: flex;
@@ -25,6 +29,9 @@ div {
 .welcome{
     font-size: 4vh;
     font-weight: bold;
+    align-self: flex-start;
+    border-left: 1px solid white;
+    padding-left: 1vh;
 }
 .align-items{
     align-items: flex-start;
@@ -34,15 +41,37 @@ div {
 }
 #app {
     display: none;
+    justify-content: space-between;
     flex-direction: column;
     align-items: flex-start;
-    width: 97vw;
+    width: 50vh;
     height: 97vh;
-    padding: 1vh;
-
+}
+#actions{
+    flex-direction: row;
+    height: 59vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+#nav-bar{
+    border: none;
+    border-radius: 100vh;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.nav-button{
+    width: 7vh;
+    height: 7vh;
+    background-color: transparent;
+    border: none;
+    border-radius: 100vh;
+}
+.nav-button:hover{
+    background-color: rgba(255, 255, 255, 0.1)
+}
+.nav-icon{
+    font-size: 3vh;
 }
 #currently-playing {
-    position: absolute;
     bottom: 1vh;
 }
 
