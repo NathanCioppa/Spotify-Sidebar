@@ -79,6 +79,12 @@ div {
 .view-div{
     display: none;
 }
+#nav-bar-home{
+    color: rgb(75, 255, 75);
+}
+#home-view{
+    display: flex;
+}
 #currently-playing {
     bottom: 1vh;
 }
@@ -86,7 +92,6 @@ div {
 #current-image{
     width: 25vh;
     height: 25vh;
-    
 }
 #current-details{
     height: 25vh;

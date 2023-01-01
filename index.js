@@ -5,16 +5,16 @@ let info = {
     user: '',
     current: {
         data: '',
-        track: '',
-        artist: '',
-        cover: '',
+        track: 'Play something on Spotify',
+        artist: 'Then it will show up here',
+        cover: 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg',
         link: '',
         position: '',
         length: ''
     },
     playback: {
         data: '',
-        playing: ''
+        playing: false
     },
 }
 
@@ -36,6 +36,9 @@ function elem(elementId) {
 }
 function elemClass(className) {
     return document.getElementsByClassName(className)
+}
+function getLocal(key) {
+    return window.localStorage.getItem(key)
 }
 
 async function get(endpoint) {
@@ -70,6 +73,20 @@ function pageLoad() {
         document.getElementById('token-input').value = storedToken
         signIn()
     }
+    if(getLocal('color') !== null) {
+        theme.color = getLocal('color')
+        theme.red = getLocal('red')
+        theme.green = getLocal('green')
+        theme.blue = getLocal('blue')
+
+        const red = Number(theme.red) < 16 ? `0${Number(theme.red).toString(16)}` : Number(theme.red).toString(16)
+        const green = Number(theme.green) < 16 ? `0${Number(theme.green).toString(16)}` : Number(theme.green).toString(16)
+        const blue = Number(theme.blue) < 16 ? `0${Number(theme.blue).toString(16)}` : Number(theme.blue).toString(16)
+
+        elem('color-picker').value = `#${red}${green}${blue}`
+
+        changeTheme(true)
+    }
 }
 
 async function signIn() {
@@ -87,8 +104,8 @@ async function signIn() {
         window.localStorage.setItem('token', token)
 
         const playing = await get('https://api.spotify.com/v1/me/player')
-        playing.is_playing ? info.playback.playing = true : info.playback.playing = false
-
+        info.playback.playing = playing === undefined ? false : playing.is_playing ? true : false
+        
         getCurrent()
         showContent()
         
@@ -97,11 +114,11 @@ async function signIn() {
         window.localStorage.removeItem('token')
         elem('token-input').value = ''
     }
-
 }
 
 async function getCurrent() {
     const playing = await get('https://api.spotify.com/v1/me/player')
+    if(playing === undefined) return;
     if(playing.is_playing) {
         info.playback.playing = true
         const data = await get('https://api.spotify.com/v1/me/player/currently-playing')
@@ -138,6 +155,7 @@ async function previous() {
 
 async function pauseResume() {
     const data = await get('https://api.spotify.com/v1/me/player')
+    if(data === undefined) return 
     data.is_playing ? pause() : resume()
 }
 
@@ -195,7 +213,8 @@ function setView(element) {
     const selected = element.children[0]
 
     for(let i = 0; i < buttons.length; i++) {
-        buttons[i].style.color = buttons[i].id === selected.id ? theme.color : 'black'
+        const color = theme.color === '' ? theme.defautlColor : theme.color
+        buttons[i].style.color = buttons[i].id === selected.id ? color : 'black'
     }
 
     const views = elemClass('view-div')
@@ -219,10 +238,15 @@ function setNewColor() {
     theme.color = color
     theme.customColors.push({color,red,green,blue})
 
-    changeTheme()
+    window.localStorage.setItem('color', color)
+    window.localStorage.setItem('red', red)
+    window.localStorage.setItem('green', green)
+    window.localStorage.setItem('blue', blue)
+
+    changeTheme(false)
 }
 
-function changeTheme() {
+function changeTheme(onPageLoad) {
     const color = theme.color
 
     const playbackButtons = elemClass('playback-button')
@@ -230,7 +254,7 @@ function changeTheme() {
         playbackButtons[i].style.backgroundColor = color
     }
 
-    elem('nav-bar-palette').style.color = color
+    onPageLoad ? elem('nav-bar-home').style.color = color : elem('nav-bar-palette').style.color = color
     setBackground()
 }
 
@@ -252,8 +276,8 @@ function reloadContents() {
 async function showContent() {
     elem('name').innerText=info.user.display_name
     await getQueue()
-    elem('app').style.display='flex'
     elem('sign-in').style.display='none'
+    elem('app').style.display='flex'
 }
 
 function signOut() {
