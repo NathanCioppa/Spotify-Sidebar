@@ -76,8 +76,8 @@ div {
 #view{
     width: 41vh;
 }
-#color-picker{
-
+.view-div{
+    display: none;
 }
 #currently-playing {
     bottom: 1vh;

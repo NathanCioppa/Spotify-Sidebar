@@ -197,6 +197,12 @@ function setView(element) {
     for(let i = 0; i < buttons.length; i++) {
         buttons[i].style.color = buttons[i].id === selected.id ? theme.color : 'black'
     }
+
+    const views = elemClass('view-div')
+    for (let i = 0; i < views.length; i++) {
+        const viewToShow = views[i].id.slice(0,views[i].id.indexOf('-'))
+        views[i].style.display = selected.id.includes(viewToShow) ? 'flex' : 'none'
+    }
 }
 
 function setNewColor() {
