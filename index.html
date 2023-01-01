@@ -39,14 +39,18 @@
         </div>
         <div id="actions">
             <div id="nav-bar">
-                <button class="nav-button"><i id="nav-bar-home" class="fa-solid fa-house icon nav-icon"></i></button>
-                <button class="nav-button"><i id="nav-bar-playlists" class="fa-solid fa-music icon nav-icon"></i></button>
-                <button class="nav-button"><i id="nav-bar-search" class="fa-solid fa-magnifying-glass icon nav-icon"></i></button>
-                <button class="nav-button"><i id="nav-bar-switch" class="fa-solid fa-arrow-right-arrow-left icon nav-icon"></i></button>
-                <button class="nav-button"><i id="nav-bar-settings" class="fa-solid fa-gears icon nav-icon"></i></button>
+                <button onclick=setView(this) class="nav-button"><i id="nav-bar-home" class="fa-solid fa-house icon nav-icon"></i></button>
+                <button onclick=setView(this) class="nav-button"><i id="nav-bar-playlists" class="fa-solid fa-music icon nav-icon"></i></button>
+                <button onclick=setView(this) class="nav-button"><i id="nav-bar-search" class="fa-solid fa-magnifying-glass icon nav-icon"></i></button>
+                <button onclick=setView(this) class="nav-button"><i id="nav-bar-switch" class="fa-solid fa-arrow-right-arrow-left icon nav-icon"></i></button>
+                <button onclick=setView(this) class="nav-button"><i id="nav-bar-palette" class="fa-solid fa-palette icon nav-icon"></i></button>
+                <button onclick=setView(this) class="nav-button"><i id="nav-bar-settings" class="fa-solid fa-gears icon nav-icon"></i></button>
             </div>
             <div id="view">
-
+                <div id="theme">
+                    <input id="color-picker" type="color">
+                    <button onclick=setNewColor()>log color</button>
+                </div>
             </div>
         </div>
         <div id="currently-playing" >

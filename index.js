@@ -15,11 +15,26 @@ let info = {
     playback: {
         data: '',
         playing: ''
+    },
+    theme: {
+        defautlColor: 'rgb(75, 255, 75)',
+        customColors: [],
+        color: '',
+        red: '',
+        green: '',
+        blue: '',
+        background: {
+            type:'linear-gradient',
+            direction:'to right',
+        }
     }
 }
 
 function elem(elementId) {
     return document.getElementById(elementId)
+}
+function elemClass(className) {
+    return document.getElementsByClassName(className)
 }
 
 async function get(endpoint) {
@@ -167,13 +182,57 @@ function progressBar() {
     c.fillStyle='white'
     c.fillRect(0,0,progress,height)
     c.stroke()
-    
-    
 }
 
 function getGreeting() {
     const hour = new Date().getHours()
     return hour < 5 ? 'evening' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening'
+}
+
+function setView(element) {
+    const buttons = elemClass('nav-icon')
+    const selected = element.children[0]
+    const theme = info.theme
+
+    for(let i = 0; i < buttons.length; i++) {
+        buttons[i].style.color = buttons[i].id === selected.id ? theme.color : 'black'
+        
+    }
+}
+
+function setNewColor() {
+    const newColor = elem('color-picker').value
+    const red = parseInt(newColor.slice(1,3),16)
+    const green = parseInt(newColor.slice(3,5),16)
+    const blue = parseInt(newColor.slice(5,7),16)
+
+    info.theme.red = red
+    info.theme.green = green
+    info.theme.blue = blue
+
+    const color = `rgb(${red},${green},${blue})`
+    info.theme.color = color
+    info.theme.customColors.push({color,red,green,blue})
+
+    changeTheme()
+}
+
+function changeTheme() {
+    const theme = info.theme
+    const color = theme.color
+
+    const playbackButtons = elemClass('playback-button')
+    for(let i = 0; i < playbackButtons.length; i++) {
+        playbackButtons[i].style.backgroundColor = color
+    }
+
+    elem('nav-bar-palette').style.color = color
+    setBackground()
+}
+
+function setBackground() {
+    const theme = info.theme
+    document.body.style.backgroundImage = `${theme.background.type}(${theme.background.direction}, rgb(20,20,20), rgba(${theme.red},${theme.green},${theme.blue}, 0.2))`
 }
 
 function reloadContents() {
@@ -207,7 +266,7 @@ function switchAlign() {
 }
 
 function switchFlexDirection() {
-    const items = document.getElementsByClassName('flex-direction')
+    const items = elemClass('flex-direction')
 
     for(let i = 0; i< items.length; i++) {
         const direction = items[i].style.flexDirection

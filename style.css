@@ -49,7 +49,9 @@ div {
 }
 #actions{
     flex-direction: row;
+    justify-content: space-between;
     height: 59vh;
+    width: 50vh;
     margin-top: 1vh;
     margin-bottom: 1vh;
 }
@@ -71,6 +73,12 @@ div {
 .nav-icon{
     font-size: 3vh;
 }
+#view{
+    width: 41vh;
+}
+#color-picker{
+
+}
 #currently-playing {
     bottom: 1vh;
 }
@@ -78,8 +86,7 @@ div {
 #current-image{
     width: 25vh;
     height: 25vh;
-    min-height: 100px;
-    min-width: 100px;
+    
 }
 #current-details{
     height: 25vh;
@@ -112,8 +119,6 @@ div {
     padding: 1vh;
     width: 6vh;
     height: 6vh;
-    min-height: 25px;
-    min-width: 25px;
     border: none;
     border-radius: 500px;
     background-color: rgb(75, 255, 75);
