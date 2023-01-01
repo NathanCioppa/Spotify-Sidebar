@@ -16,17 +16,18 @@ let info = {
         data: '',
         playing: ''
     },
-    theme: {
-        defautlColor: 'rgb(75, 255, 75)',
-        customColors: [],
-        color: '',
-        red: '',
-        green: '',
-        blue: '',
-        background: {
-            type:'linear-gradient',
-            direction:'to right',
-        }
+}
+
+let theme = {
+    defautlColor: 'rgb(75, 255, 75)',
+    customColors: [],
+    color: '',
+    red: '',
+    green: '',
+    blue: '',
+    background: {
+        type:'linear-gradient',
+        direction:'to right',
     }
 }
 
@@ -192,11 +193,9 @@ function getGreeting() {
 function setView(element) {
     const buttons = elemClass('nav-icon')
     const selected = element.children[0]
-    const theme = info.theme
 
     for(let i = 0; i < buttons.length; i++) {
         buttons[i].style.color = buttons[i].id === selected.id ? theme.color : 'black'
-        
     }
 }
 
@@ -206,19 +205,18 @@ function setNewColor() {
     const green = parseInt(newColor.slice(3,5),16)
     const blue = parseInt(newColor.slice(5,7),16)
 
-    info.theme.red = red
-    info.theme.green = green
-    info.theme.blue = blue
+    theme.red = red
+    theme.green = green
+    theme.blue = blue
 
     const color = `rgb(${red},${green},${blue})`
-    info.theme.color = color
-    info.theme.customColors.push({color,red,green,blue})
+    theme.color = color
+    theme.customColors.push({color,red,green,blue})
 
     changeTheme()
 }
 
 function changeTheme() {
-    const theme = info.theme
     const color = theme.color
 
     const playbackButtons = elemClass('playback-button')
@@ -231,7 +229,6 @@ function changeTheme() {
 }
 
 function setBackground() {
-    const theme = info.theme
     document.body.style.backgroundImage = `${theme.background.type}(${theme.background.direction}, rgb(20,20,20), rgba(${theme.red},${theme.green},${theme.blue}, 0.2))`
 }
 
