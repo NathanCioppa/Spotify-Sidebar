@@ -79,11 +79,71 @@ div {
 .view-div{
     display: none;
 }
+.view-title{
+    font-size: 4vh;
+    font-weight: bold;
+    border-bottom: 1px solid white;
+    margin-bottom: 2vh;
+}
 #nav-bar-home{
     color: rgb(75, 255, 75);
 }
 #home-view{
     display: flex;
+}
+.view-subtitle{
+    font-size: 2.3vh;
+    width: fit-content;
+    border-bottom: 1px solid white;
+    margin: 2px;
+}
+#new-color-title{
+    font-size: 2.3vh;
+    width: fit-content;
+    border-bottom: 1px solid white;
+    margin: 2px;
+}
+#new-color{
+    flex-direction: row;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+#set-color{
+    margin-left: 1vh;
+    height: 7vh;
+    width: 7vh;
+    color: white;
+    border: none;
+    border-radius: 2vh;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+#set-color-icon{
+    font-size: 4vh;
+}
+#set-default-color-icon{
+    font-size: 4vh;
+    color: rgb(75, 255, 75);
+}
+#color-picker{
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 1vh;
+    width: 7vh;
+    height: 7vh;
+    align-self: flex-end;
+}
+#color-picker:hover{
+    cursor: pointer;
+}
+#default-color{
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 1vh;
+    width: 7vh;
+    height: 7vh;
+}
+#default-color:hover{
+    cursor: pointer;
 }
 #currently-playing {
     bottom: 1vh;
@@ -130,6 +190,10 @@ div {
 }
 .playback-button:active{
     background-color: rgba(75, 255, 75, 0.5)
+}
+
+.icon{
+    vertical-align: middle;
 }
 
 .playback-icon{

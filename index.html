@@ -48,23 +48,39 @@
             </div>
             <div id="view">
                 <div class="view-div" id="home-view">
-                    <h1>home</h1>
+                    <span class="view-title">Home</span>
                 </div>
                 <div class="view-div" id="playlists-view">
-                    <h1>playlists</h1>
+                    <span class="view-title">Playlists</span>
                 </div>
                 <div class="view-div" id="search-view">
-                    <h1>search</h1>
+                    <span class="view-title">Search</span>
                 </div>
                 <div class="view-div" id="switch-view">
-                    <h1>switch</h1>
+                    <span class="view-title">Switch</span>
                 </div>
                 <div class="view-div" id="palette-view">
-                    <input id="color-picker" type="color" value="#4BFF4B">
-                    <button onclick=setNewColor()>log color</button>
+                    <span class="view-title">Theme</span>
+                    <div style="flex-direction: row; justify-content: space-between;">
+                        <div>
+                            <span class="view-subtitle" id="new-color-title">Choose new color:</span>
+                            <div id="new-color">
+                                <input onchange=previewColor() title="Choose color" id="color-picker" type="color" value="#4BFF4B">
+                                <button title="Set color" id="set-color" onclick=setNewColor()><i id="set-color-icon" class="fa-solid fa-paintbrush icon"></i></button>
+                            </div> 
+                        </div>
+                        <div>
+                            <span class="view-subtitle">Default color:</span>
+                            <div style="flex-direction: row; margin-top: 1vh;">
+                                <input id="default-color" type="color" value="#4BFF4B" disabled>
+                                <button onclick=setDefaultColor() id="set-color" title="Set default color"><i id="set-default-color-icon" class="fa-solid fa-paintbrush icon"></i></button>
+                            </div>
+                        </div>  
+                    </div>
+                    
                 </div>
                 <div class="view-div" id="settings-view">
-                    <h1>settings</h1>
+                    <span class="view-title">Settings</span>
                 </div>
             </div>
         </div>
@@ -77,9 +93,9 @@
                         <span id="current-artist">Then it will show up here</span>
                     </div>
                     <div id="playback">
-                        <button class="playback-button" onclick=previous()><i class="fa-solid fa-backward-step playback-icon"></i></button>
-                        <button class="playback-button" onclick=pauseResume()><i id="play-icon" class="fa-solid fa-play playback-icon"></i></button>
-                        <button class="playback-button" onclick=next()><i class="fa-solid fa-forward-step playback-icon"></i></button>
+                        <button class="playback-button" onclick=previous()><i class="fa-solid fa-backward-step playback-icon icon"></i></button>
+                        <button class="playback-button" onclick=pauseResume()><i id="play-icon" class="fa-solid fa-play playback-icon icon"></i></button>
+                        <button class="playback-button" onclick=next()><i class="fa-solid fa-forward-step playback-icon icon"></i></button>
                     </div>
                 </div>
             </div>

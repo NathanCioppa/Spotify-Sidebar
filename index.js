@@ -84,6 +84,7 @@ function pageLoad() {
         const blue = Number(theme.blue) < 16 ? `0${Number(theme.blue).toString(16)}` : Number(theme.blue).toString(16)
 
         elem('color-picker').value = `#${red}${green}${blue}`
+        elem('set-color-icon').style.color = `#${red}${green}${blue}`
 
         changeTheme(true)
     }
@@ -108,7 +109,7 @@ async function signIn() {
         
         getCurrent()
         showContent()
-        
+        setInterval(getCurrent, 1000)
     } else {
         console.log('invalid access token')
         window.localStorage.removeItem('token')
@@ -135,7 +136,6 @@ async function getCurrent() {
 
     reloadContents()
 }
-setInterval(getCurrent, 1000)
 
 async function getQueue() {
     const data = await get('https://api.spotify.com/v1/me/player/queue')
@@ -224,6 +224,10 @@ function setView(element) {
     }
 }
 
+function previewColor() {
+    elem('set-color-icon').style.color = elem('color-picker').value
+}
+
 function setNewColor() {
     const newColor = elem('color-picker').value
     const red = parseInt(newColor.slice(1,3),16)
@@ -237,13 +241,13 @@ function setNewColor() {
     const color = `rgb(${red},${green},${blue})`
     theme.color = color
     theme.customColors.push({color,red,green,blue})
+    
+    changeTheme(false)
 
     window.localStorage.setItem('color', color)
     window.localStorage.setItem('red', red)
     window.localStorage.setItem('green', green)
     window.localStorage.setItem('blue', blue)
-
-    changeTheme(false)
 }
 
 function changeTheme(onPageLoad) {
@@ -260,6 +264,21 @@ function changeTheme(onPageLoad) {
 
 function setBackground() {
     document.body.style.backgroundImage = `${theme.background.type}(${theme.background.direction}, rgb(20,20,20), rgba(${theme.red},${theme.green},${theme.blue}, 0.2))`
+}
+
+function setDefaultColor() {
+    console.log('default')
+    theme.color = theme.defautlColor
+    theme.red = '75'
+    theme.green = '255'
+    theme.blue = '75'
+    
+    changeTheme(false)
+
+    window.localStorage.setItem('color', theme.color)
+    window.localStorage.setItem('red', theme.red)
+    window.localStorage.setItem('green', theme.green)
+    window.localStorage.setItem('blue', theme.blue)
 }
 
 function reloadContents() {
