@@ -44,7 +44,7 @@ div {
     justify-content: space-between;
     flex-direction: column;
     align-items: flex-start;
-    width: 50vh;
+    width: 51vh;
     height: 97vh;
 }
 #actions{
@@ -103,10 +103,11 @@ div {
     border-bottom: 1px solid white;
     margin: 2px;
 }
-#new-color{
+.new-color{
     flex-direction: row;
     margin-top: 1vh;
     margin-bottom: 1vh;
+    flex-wrap: wrap;
 }
 #set-color{
     margin-left: 1vh;
@@ -142,6 +143,17 @@ div {
     width: 7vh;
     height: 7vh;
 }
+.quick-color{
+    display: contents;
+}
+.previous-color{
+    flex-direction: row;
+    width: 4vh;
+    height: 4vh;
+    border: none;
+    outline: none;
+    background: none;
+}
 #default-color:hover{
     cursor: pointer;
 }
@@ -155,13 +167,14 @@ div {
 }
 #current-details{
     height: 25vh;
-    width: 25vh;
+    width: 26vh;
     justify-content:space-between ;
 }
 #current-words{
     margin-left: 1vh;
-    padding: 1vh;
+    padding: 0.5vh;
     padding-right: 0;
+    padding-left: 1vh;
     margin-bottom: 1vh;
     justify-content: space-between;
     height: 19vh;
@@ -178,6 +191,7 @@ div {
 #playback{
     flex-direction: row;
     justify-content:space-evenly ;
+    margin-left: 1vh;
 }
 .playback-button{
     margin: 0.5vh;
@@ -201,7 +215,7 @@ div {
     font-size: 3vh;
 }
 #progress-bar{
-    width: 50vh;
+    width: 51vh;
     height: 2px;
     background-color: rgba(255, 255, 255, 0.2);
 }

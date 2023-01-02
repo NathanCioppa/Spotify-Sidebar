@@ -224,11 +224,34 @@ function setView(element) {
     }
 }
 
+function mapPreviousColors() {
+    const colors = theme.customColors
+    createColorToAppend()
+}
+
+function createColorToAppend() {
+    const button = document.createElement('button')
+    button.title = 'Set color'
+    button.className = 'quick-color'
+    button.setAttribute('onclick', 'setOldColor(this)')
+
+    const input = document.createElement('input')
+    input.type = 'color'
+    input.title = 'Set color'
+    input.className = 'previous-color'
+    input.setAttribute('value', rgbToHex(theme.red, theme.green, theme.blue))
+    input.disabled = true
+    
+    button.append(input)
+    elem('previous-colors').append(button)
+}
+
 function previewColor() {
     elem('set-color-icon').style.color = elem('color-picker').value
 }
 
 function setNewColor() {
+
     const newColor = elem('color-picker').value
     const red = parseInt(newColor.slice(1,3),16)
     const green = parseInt(newColor.slice(3,5),16)
@@ -240,14 +263,43 @@ function setNewColor() {
 
     const color = `rgb(${red},${green},${blue})`
     theme.color = color
-    theme.customColors.push({color,red,green,blue})
     
     changeTheme(false)
 
+    let push = true
+    for(let i = 0; i < theme.customColors.length; i++) {
+        if(theme.customColors[i].color === color) {
+            push = false
+            i = theme.customColors.length
+        }
+    }
+    if(push) {
+        theme.customColors.push({color,red,green,blue})
+        mapPreviousColors()
+    }
+    
     window.localStorage.setItem('color', color)
     window.localStorage.setItem('red', red)
     window.localStorage.setItem('green', green)
     window.localStorage.setItem('blue', blue)
+}
+
+function setOldColor(element) {
+    const color = element.children[0].value
+    const red = parseInt(color.slice(1,3),16)
+    const green = parseInt(color.slice(3,5),16)
+    const blue = parseInt(color.slice(5,7),16)
+
+    theme.color = `rgb(${red},${green},${blue})`
+    theme.red = red
+    theme.green = green
+    theme.blue = blue
+    changeTheme(false)
+
+    window.localStorage.setItem('color', theme.color)
+    window.localStorage.setItem('red', theme.red)
+    window.localStorage.setItem('green', theme.green)
+    window.localStorage.setItem('blue', theme.blue)
 }
 
 function changeTheme(onPageLoad) {
@@ -267,7 +319,6 @@ function setBackground() {
 }
 
 function setDefaultColor() {
-    console.log('default')
     theme.color = theme.defautlColor
     theme.red = '75'
     theme.green = '255'
@@ -279,6 +330,13 @@ function setDefaultColor() {
     window.localStorage.setItem('red', theme.red)
     window.localStorage.setItem('green', theme.green)
     window.localStorage.setItem('blue', theme.blue)
+}
+
+function rgbToHex(r, g, b){
+    const red = Number(r) < 16 ? `0${Number(r).toString(16)}` : Number(r).toString(16)
+    const green = Number(g) < 16 ? `0${Number(g).toString(16)}` : Number(g).toString(16)
+    const blue = Number(b) < 16 ? `0${Number(b).toString(16)}` : Number(b).toString(16)
+    return '#'+red+green+blue
 }
 
 function reloadContents() {
@@ -319,4 +377,5 @@ function switchFlexDirection() {
         items[i].style.flexDirection = direction === 'row-reverse' ? 'row' : 'row-reverse'
     }
     elem('current-words').style.marginLeft = items[0].style.flexDirection === 'row-reverse' ? '0' : '1vh'
+    elem('playback').style.marginLeft = items[0].style.flexDirection === 'row-reverse' ? '0' : '1vh'
 }

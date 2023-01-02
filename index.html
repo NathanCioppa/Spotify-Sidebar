@@ -31,8 +31,7 @@
         </div>
     
     <div id="app" class="align-items">
-
-        
+ 
         <div>
             <span class="welcome" id="greeting">Welcome</span>
             <span class="welcome" id="name">User</span>
@@ -64,20 +63,30 @@
                     <div style="flex-direction: row; justify-content: space-between;">
                         <div>
                             <span class="view-subtitle" id="new-color-title">Choose new color:</span>
-                            <div id="new-color">
+                            <div class="new-color">
                                 <input onchange=previewColor() title="Choose color" id="color-picker" type="color" value="#4BFF4B">
                                 <button title="Set color" id="set-color" onclick=setNewColor()><i id="set-color-icon" class="fa-solid fa-paintbrush icon"></i></button>
                             </div> 
                         </div>
                         <div>
                             <span class="view-subtitle">Default color:</span>
-                            <div style="flex-direction: row; margin-top: 1vh;">
-                                <input id="default-color" type="color" value="#4BFF4B" disabled>
-                                <button onclick=setDefaultColor() id="set-color" title="Set default color"><i id="set-default-color-icon" class="fa-solid fa-paintbrush icon"></i></button>
+                            <div class="new-color">
+                                <button class="quick-color" onclick=setDefaultColor() title="Set default color">
+                                    <input id="default-color" type="color" value="#4BFF4B" disabled>
+                                </button>
                             </div>
                         </div>  
                     </div>
-                    
+                    <div>
+                        <span class="view-subtitle">Previous colors:</span>
+                        <div id="previous-colors" class="new-color">
+                            <!-- Template for qiuck color selections:
+                            <button title="Set color" class="quick-color" onclick=setOldColor(this)>
+                                <input class="previous-color" type="color" value='hex color' disabled>
+                            </button>
+                            -->
+                        </div>
+                    </div>
                 </div>
                 <div class="view-div" id="settings-view">
                     <span class="view-title">Settings</span>
