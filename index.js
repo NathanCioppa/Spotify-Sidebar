@@ -87,6 +87,14 @@ function pageLoad() {
         elem('set-color-icon').style.color = `#${red}${green}${blue}`
 
         changeTheme(true)
+
+        for(let i = 0; i < 20; i++) {
+            const savedColor = window.localStorage.getItem('saved-color-'+i)
+            if(savedColor !== null) {
+                theme.customColors[i] = savedColor
+                mapPreviousColors(savedColor)
+            }
+        }
     }
 }
 
@@ -224,12 +232,7 @@ function setView(element) {
     }
 }
 
-function mapPreviousColors() {
-    const colors = theme.customColors
-    createColorToAppend()
-}
-
-function createColorToAppend() {
+function appendColor(color) {
     const button = document.createElement('button')
     button.title = 'Set color'
     button.className = 'quick-color'
@@ -239,11 +242,11 @@ function createColorToAppend() {
     input.type = 'color'
     input.title = 'Set color'
     input.className = 'previous-color'
-    input.setAttribute('value', rgbToHex(theme.red, theme.green, theme.blue))
+    input.setAttribute('value', color)
     input.disabled = true
     
     button.append(input)
-    elem('previous-colors').append(button)
+    return button
 }
 
 function previewColor() {
@@ -261,21 +264,25 @@ function setNewColor() {
     theme.green = green
     theme.blue = blue
 
-    const color = `rgb(${red},${green},${blue})`
+    const color = rgbToHex(red, green, blue)
     theme.color = color
     
     changeTheme(false)
 
+    const colors = theme.customColors
     let push = true
-    for(let i = 0; i < theme.customColors.length; i++) {
-        if(theme.customColors[i].color === color) {
+    for(let i = 0; i < colors.length; i++) {
+        if(colors[i] === color) {
             push = false
-            i = theme.customColors.length
+            i = colors.length
         }
     }
     if(push) {
-        theme.customColors.push({color,red,green,blue})
-        mapPreviousColors()
+        colors.push(rgbToHex(red,green,blue))
+        mapPreviousColors(colors[colors.length-1])
+        for(let i = 0; i < colors.length; i++) {
+            window.localStorage.setItem('saved-color-'+i, colors[i])
+        }
     }
     
     window.localStorage.setItem('color', color)
@@ -300,6 +307,15 @@ function setOldColor(element) {
     window.localStorage.setItem('red', theme.red)
     window.localStorage.setItem('green', theme.green)
     window.localStorage.setItem('blue', theme.blue)
+}
+
+function mapPreviousColors(color) {
+    const colors = theme.customColors
+    if(colors.length > 20) {
+        colors.shift()
+        elem('previous-colors').children.item(0).remove()
+    }
+    elem('previous-colors').append(appendColor(color))
 }
 
 function changeTheme(onPageLoad) {

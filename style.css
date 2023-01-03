@@ -146,8 +146,8 @@ div {
 .quick-color{
     display: contents;
 }
+
 .previous-color{
-    flex-direction: row;
     width: 4vh;
     height: 4vh;
     border: none;
