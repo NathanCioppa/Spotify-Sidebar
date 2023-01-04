@@ -26,7 +26,6 @@ let theme = {
     green: '',
     blue: '',
     background: {
-        type:'linear-gradient',
         direction:'to right',
     }
 }
@@ -330,8 +329,19 @@ function changeTheme(onPageLoad) {
     setBackground()
 }
 
+function changeGradient(element) {
+    const selectedId = element.children[0].id
+    theme.background.direction = selectedId.replaceAll('-', ' ')
+    setBackground()
+    
+    const arrows = elemClass('arrow-icon')
+    for(let i = 0; i < arrows.length; i++) {
+        arrows[i].style.color = arrows[i].id === selectedId ? theme.color : 'black'
+    }
+}
+
 function setBackground() {
-    document.body.style.backgroundImage = `${theme.background.type}(${theme.background.direction}, rgb(20,20,20), rgba(${theme.red},${theme.green},${theme.blue}, 0.2))`
+    document.body.style.backgroundImage = `linear-gradient(${theme.background.direction}, rgb(20,20,20), rgba(${theme.red},${theme.green},${theme.blue}, 0.2))`
 }
 
 function setDefaultColor() {

@@ -40,8 +40,8 @@
             <div id="nav-bar">
                 <button onclick=setView(this) class="nav-button"><i id="nav-bar-home" class="fa-solid fa-house icon nav-icon"></i></button>
                 <button onclick=setView(this) class="nav-button"><i id="nav-bar-playlists" class="fa-solid fa-music icon nav-icon"></i></button>
+                <button onclick=setView(this) class="nav-button"><i id="nav-bar-queue" class="fa-solid fa-list-ul icon nav-icon"></i></button>
                 <button onclick=setView(this) class="nav-button"><i id="nav-bar-search" class="fa-solid fa-magnifying-glass icon nav-icon"></i></button>
-                <button onclick=setView(this) class="nav-button"><i id="nav-bar-switch" class="fa-solid fa-arrow-right-arrow-left icon nav-icon"></i></button>
                 <button onclick=setView(this) class="nav-button"><i id="nav-bar-palette" class="fa-solid fa-palette icon nav-icon"></i></button>
                 <button onclick=setView(this) class="nav-button"><i id="nav-bar-settings" class="fa-solid fa-gears icon nav-icon"></i></button>
             </div>
@@ -55,8 +55,8 @@
                 <div class="view-div" id="search-view">
                     <span class="view-title">Search</span>
                 </div>
-                <div class="view-div" id="switch-view">
-                    <span class="view-title">Switch</span>
+                <div class="view-div" id="queue-view">
+                    <span class="view-title">Queue</span>
                 </div>
                 <div class="view-div" id="palette-view">
                     <span class="view-title">Theme</span>
@@ -85,6 +85,19 @@
                                 <input class="previous-color" type="color" value='hex color' disabled>
                             </button>
                             -->
+                        </div>
+                    </div>
+                    <div>
+                        <span class="view-subtitle">Background gradient direction:</span>
+                        <div style="flex-direction: row;">
+                            <button onclick="changeGradient(this)" class="small-icon-button"><i id="to-right" class="fa-solid fa-arrow-right icon arrow-icon"></i></button>
+                            <button onclick="changeGradient(this)" class="small-icon-button"><i id="to-left" class="fa-solid fa-arrow-right icon arrow-icon"></i></button>
+                            <button onclick="changeGradient(this)" class="small-icon-button"><i id="to-top" class="fa-solid fa-arrow-right icon arrow-icon"></i></button>
+                            <button onclick="changeGradient(this)" class="small-icon-button"><i id="to-bottom" class="fa-solid fa-arrow-right icon arrow-icon"></i></button>
+                            <button onclick="changeGradient(this)" class="small-icon-button"><i id="to-bottom-right" class="fa-solid fa-arrow-right icon arrow-icon"></i></button>
+                            <button onclick="changeGradient(this)" class="small-icon-button"><i id="to-top-left" class="fa-solid fa-arrow-right icon arrow-icon"></i></button>
+                            <button onclick="changeGradient(this)" class="small-icon-button"><i id="to-bottom-left" class="fa-solid fa-arrow-right icon arrow-icon"></i></button>
+                            <button onclick="changeGradient(this)" class="small-icon-button"><i id="to-top-right" class="fa-solid fa-arrow-right icon arrow-icon"></i></button>
                         </div>
                     </div>
                 </div>
