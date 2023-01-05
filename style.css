@@ -79,8 +79,7 @@ div {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 0.5vh;
-    margin-right: 0.5vh;
+    margin: 0.5vh;
     background-color: rgba(255, 255, 255, 0.1);
     border: none;
     border-radius: 1vh;
@@ -88,6 +87,9 @@ div {
 .arrow-icon{
     font-size: 3vh;
     color: black
+}
+#to-right{
+    color: rgb(75, 255, 75);
 }
 #to-left{
     rotate: 180deg;

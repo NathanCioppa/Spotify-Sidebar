@@ -21,10 +21,10 @@ let info = {
 let theme = {
     defautlColor: 'rgb(75, 255, 75)',
     customColors: [],
-    color: '',
-    red: '',
-    green: '',
-    blue: '',
+    color: 'rgb(75, 255, 75)',
+    red: '75',
+    green: '225',
+    blue: '75',
     background: {
         direction:'to right',
     }
@@ -53,7 +53,6 @@ async function get(endpoint) {
     }
     
 }
-
 async function post(endpoint) {
     try {
         await fetch(endpoint, {
@@ -72,18 +71,19 @@ function pageLoad() {
         document.getElementById('token-input').value = storedToken
         signIn()
     }
+
+    theme.background.direction = getLocal('gradient') !== null ? getLocal('gradient') : theme.background.direction
+
     if(getLocal('color') !== null) {
         theme.color = getLocal('color')
         theme.red = getLocal('red')
         theme.green = getLocal('green')
         theme.blue = getLocal('blue')
 
-        const red = Number(theme.red) < 16 ? `0${Number(theme.red).toString(16)}` : Number(theme.red).toString(16)
-        const green = Number(theme.green) < 16 ? `0${Number(theme.green).toString(16)}` : Number(theme.green).toString(16)
-        const blue = Number(theme.blue) < 16 ? `0${Number(theme.blue).toString(16)}` : Number(theme.blue).toString(16)
+        const color = theme.color.includes('#') ? theme.color : rgbToHex(theme.red, theme.green, theme.blue)
 
-        elem('color-picker').value = `#${red}${green}${blue}`
-        elem('set-color-icon').style.color = `#${red}${green}${blue}`
+        elem('color-picker').value = color
+        elem('set-color-icon').style.color = color
 
         changeTheme(true)
 
@@ -95,6 +95,7 @@ function pageLoad() {
             }
         }
     }
+    changeGradientArrows()
 }
 
 async function signIn() {
@@ -327,16 +328,20 @@ function changeTheme(onPageLoad) {
 
     onPageLoad ? elem('nav-bar-home').style.color = color : elem('nav-bar-palette').style.color = color
     setBackground()
+    changeGradientArrows()
 }
 
 function changeGradient(element) {
     const selectedId = element.children[0].id
     theme.background.direction = selectedId.replaceAll('-', ' ')
     setBackground()
-    
+    window.localStorage.setItem('gradient', theme.background.direction)
+    changeGradientArrows()
+}
+function changeGradientArrows() {
     const arrows = elemClass('arrow-icon')
     for(let i = 0; i < arrows.length; i++) {
-        arrows[i].style.color = arrows[i].id === selectedId ? theme.color : 'black'
+        arrows[i].style.color = arrows[i].id.replaceAll('-', ' ') === theme.background.direction ? theme.color : 'black'
     }
 }
 
