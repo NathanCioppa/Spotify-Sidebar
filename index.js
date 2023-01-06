@@ -327,6 +327,7 @@ function changeTheme(onPageLoad) {
     }
 
     onPageLoad ? elem('nav-bar-home').style.color = color : elem('nav-bar-palette').style.color = color
+    elem('sign-out').style.color = color
     setBackground()
     changeGradientArrows()
 }
@@ -383,6 +384,7 @@ function reloadContents() {
 
 async function showContent() {
     elem('name').innerText=info.user.display_name
+    elem('user-image').src=info.user.images[0].url
     await getQueue()
     elem('sign-in').style.display='none'
     elem('app').style.display='flex'
@@ -398,15 +400,10 @@ function signOut() {
 
 function switchAlign() {
     document.body.style.alignItems = document.body.style.alignItems === 'flex-end' ? 'flex-start' : 'flex-end'
+    elem('align-overall').style.rotate = document.body.style.alignItems === 'flex-end' ? '270deg' : '90deg'
 }
 
-function switchFlexDirection() {
-    const items = elemClass('flex-direction')
-
-    for(let i = 0; i< items.length; i++) {
-        const direction = items[i].style.flexDirection
-        items[i].style.flexDirection = direction === 'row-reverse' ? 'row' : 'row-reverse'
-    }
-    elem('current-words').style.marginLeft = items[0].style.flexDirection === 'row-reverse' ? '0' : '1vh'
-    elem('playback').style.marginLeft = items[0].style.flexDirection === 'row-reverse' ? '0' : '1vh'
+function playbackAlignment() {
+    const element = elem('playing-alignment').style
+    element.flexDirection = element.flexDirection === 'row-reverse' ? 'row' : 'row-reverse' 
 }

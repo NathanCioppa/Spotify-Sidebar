@@ -25,9 +25,6 @@
     
     <div style="flex-direction: row; position: fixed;">
             <button onclick=window.localStorage.clear()>clear storage</button>
-            <button onclick=switchAlign()>switch</button>
-            <button onclick=switchFlexDirection()>switch</button>
-            <button onclick=signOut()>sign out</button>
         </div>
     
     <div id="app" class="align-items">
@@ -35,6 +32,10 @@
         <div>
             <span class="welcome" id="greeting">Welcome</span>
             <span class="welcome" id="name">User</span>
+            <div id="user">
+                <img id="user-image" src="https://ml7u4cm4jjmy.i.optimole.com/CaABJw-CBpwrp7H/w:auto/h:auto/q:auto/https://bmsenergiasolar.com.br/wp-content/uploads/2020/02/default-user-2.png" alt="user-image">
+                <button title="Sign out" id="sign-out-button" onclick=signOut()><i id="sign-out" class="fa-solid fa-arrow-right-from-bracket icon"></i></button>
+            </div>
         </div>
         <div id="actions">
             <div id="nav-bar">
@@ -102,12 +103,16 @@
                     </div>
                 </div>
                 <div class="view-div" id="settings-view">
-                    <span class="view-title">Settings</span>
+                    <span class="view-title">Alignment</span>
+                    <span class="view-subtitle">Switch overall alignment:</span>
+                    <button onclick=switchAlign() class="alignment-button"><i id="align-overall" class="fa-solid fa-arrows-up-to-line icon align-icon"></i></button>
+                    <span style="margin-top: 1vh;" class="view-subtitle">Switch playback alignment</span>
+                    <button onclick=playbackAlignment() class="alignment-button"><i id="align-playback" class="fa-solid fa-arrow-right-arrow-left icon align-icon"></i></button>
                 </div>
             </div>
         </div>
         <div id="currently-playing" >
-            <div class="flex-direction">     
+            <div id="playing-alignment">
             <a id="current-link" title="Click to view track on Spotify" href=""><img id="current-image" src="https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg" alt="album cover"></a>
                 <div id="current-details">
                     <div id="current-words">

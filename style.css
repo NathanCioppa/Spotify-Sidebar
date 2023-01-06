@@ -32,12 +32,27 @@ div {
     align-self: flex-start;
     border-left: 1px solid white;
     padding-left: 1vh;
+    width: 50vh;
+}
+#user{
+    position: absolute;
+    align-self: flex-end;
+}
+#user-image{
+    width: 5vh;
+    height: 5vh;
+    border-radius: 100vh;
+}
+#sign-out-button{
+    display: contents;
+}
+#sign-out{
+    margin-top: 0.8vh;
+    font-size: 3vh;
+    color: rgb(75, 255, 75);
 }
 .align-items{
     align-items: flex-start;
-}
-.flex-direction{
-    flex-direction: row;
 }
 #app {
     display: none;
@@ -196,10 +211,27 @@ div {
 #default-color:hover{
     cursor: pointer;
 }
+.alignment-button{
+    width: 5vh;
+    height: 5vh;
+    border-radius: 1vh;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 0.5vh;
+}
+.align-icon{
+    color: white;
+    font-size: 2.7vh;
+}
+#align-overall{
+    rotate: 90deg;
+}
 #currently-playing {
     bottom: 1vh;
 }
-
+#playing-alignment{
+    flex-direction: row;
+}
 #current-image{
     width: 25vh;
     height: 25vh;
@@ -223,6 +255,7 @@ div {
 #current-track{
     font-size: 3vh;
     font-weight: bold;
+    margin-right: 1vh;
 }
 #current-artist{
     font-size: 2.3vh;
