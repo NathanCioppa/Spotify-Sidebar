@@ -12,6 +12,7 @@ let info = {
         position: '',
         length: ''
     },
+    playlists:[],
     playback: {
         data: '',
         playing: false
@@ -122,6 +123,7 @@ async function signIn() {
         const playing = await get('https://api.spotify.com/v1/me/player')
         info.playback.playing = playing === undefined ? false : playing.is_playing ? true : false
         
+        getPlaylists()
         getCurrent()
         showContent()
         setInterval(getCurrent, 1000)
@@ -150,6 +152,48 @@ async function getCurrent() {
     } else {info.playback.playing = false}
 
     reloadContents()
+}
+
+async function getPlaylists() {
+    const playlists = await get('https://api.spotify.com/v1/me/playlists?limit=50')
+    console.log(playlists)
+    playlists.items.map((playlist)=>{
+        const image = playlist.images[0] !== undefined ? playlist.images[0].url : 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg'
+        const name = playlist.name
+        const uri = playlist.uri
+        
+        info.playlists.push({image,name,uri})
+    })
+    showPlaylists()
+}
+
+function showPlaylists() {
+    const playlists = info.playlists
+    playlists.map((playlistInfo) => {
+        const playlist = document.createElement('div')
+        playlist.className = 'playlist'
+
+        const image = document.createElement('img')
+        image.className = 'playlist-image'
+        image.src = playlistInfo.image
+
+        const name = document.createElement('span')
+        name.className = 'playlist-name'
+        name.innerText = playlistInfo.name.length > 35 ? playlistInfo.name.slice(0,35)+'...' : playlistInfo.name
+        name.title = playlistInfo.name
+
+        const playButton = document.createElement('button')
+        playButton.id = playlistInfo.uri
+        playButton.className = 'playlist-play-button'
+
+        const shuffleButton = document.createElement('button')
+        shuffleButton.id = playlistInfo.uri
+        shuffleButton.className = 'playlist-shuffle-button'
+
+        playlist.append(image, name, shuffleButton, playButton)
+
+        elem('playlists').append(playlist)
+    })
 }
 
 async function getQueue() {

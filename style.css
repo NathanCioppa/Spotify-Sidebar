@@ -88,6 +88,23 @@ div {
 .nav-icon{
     font-size: 3vh;
 }
+#playlists{
+    width: 41vh;
+    height: 51vh;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.playlist{
+flex-direction: row;
+margin-top: 1vh;
+}
+.playlist-image{
+    width: 8vh;
+    height: 8vh;
+}
+.playlist-name{
+    padding: 1vh;
+}
 .small-icon-button{
     width: 3.5vh;
     height: 3.5vh;
@@ -256,7 +273,6 @@ div {
     font-size: 3vh;
     font-weight: bold;
     margin-right: 1vh;
-    word-break: break-all;
 }
 #current-artist{
     font-size: 2.3vh;
