@@ -74,6 +74,13 @@ function pageLoad() {
 
     theme.background.direction = getLocal('gradient') !== null ? getLocal('gradient') : theme.background.direction
 
+    if(getLocal('alignment') !== null) {document.body.style.alignItems = getLocal('alignment')}
+    elem('align-overall').style.rotate = document.body.style.alignItems === 'flex-end' ? '270deg' : '90deg'
+
+    if(getLocal('navbar-align') !== null) {elem('actions').style.flexDirection = getLocal('navbar-align')}
+    if(getLocal('playback-align') !== null) {elem('playing-alignment').style.flexDirection = getLocal('playback-align')}
+    elem('current-words').style.marginLeft = elem('playing-alignment').style.flexDirection === 'row-reverse' ? '0' : '1vh'
+
     if(getLocal('color') !== null) {
         theme.color = getLocal('color')
         theme.red = getLocal('red')
@@ -399,11 +406,24 @@ function signOut() {
 }
 
 function switchAlign() {
-    document.body.style.alignItems = document.body.style.alignItems === 'flex-end' ? 'flex-start' : 'flex-end'
-    elem('align-overall').style.rotate = document.body.style.alignItems === 'flex-end' ? '270deg' : '90deg'
+    const bodyStyle = document.body.style
+    bodyStyle.alignItems = bodyStyle.alignItems === 'flex-end' ? 'flex-start' : 'flex-end'
+    elem('align-overall').style.rotate = bodyStyle.alignItems === 'flex-end' ? '270deg' : '90deg'
+
+    window.localStorage.setItem('alignment', bodyStyle.alignItems)
 }
 
-function playbackAlignment() {
+function playbackAlign() {
     const element = elem('playing-alignment').style
     element.flexDirection = element.flexDirection === 'row-reverse' ? 'row' : 'row-reverse' 
+    elem('current-words').style.marginLeft = element.flexDirection === 'row-reverse' ? '0' : '1vh'
+
+    window.localStorage.setItem('playback-align', element.flexDirection)
+}
+
+function navbarAlign() {
+    const element = elem('actions').style
+    element.flexDirection = element.flexDirection === 'row-reverse' ? 'row' : 'row-reverse'
+
+    window.localStorage.setItem('navbar-align', element.flexDirection)
 }

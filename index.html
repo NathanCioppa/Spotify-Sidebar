@@ -105,9 +105,17 @@
                 <div class="view-div" id="settings-view">
                     <span class="view-title">Alignment</span>
                     <span class="view-subtitle">Switch overall alignment:</span>
-                    <button onclick=switchAlign() class="alignment-button"><i id="align-overall" class="fa-solid fa-arrows-up-to-line icon align-icon"></i></button>
-                    <span style="margin-top: 1vh;" class="view-subtitle">Switch playback alignment</span>
-                    <button onclick=playbackAlignment() class="alignment-button"><i id="align-playback" class="fa-solid fa-arrow-right-arrow-left icon align-icon"></i></button>
+                    <button onclick=switchAlign() class="alignment-button">
+                        <i id="align-overall" class="fa-solid fa-arrows-up-to-line icon align-icon"></i>
+                    </button>
+                    <span class="view-subtitle">Switch Navbar Alignment</span>
+                    <button onclick=navbarAlign() class="alignment-button">
+                        <i id="align-navbar" class="fa-solid fa-arrow-right-arrow-left icon align-icon"></i>
+                    </button>
+                    <span class="view-subtitle">Switch playback alignment</span>
+                    <button onclick=playbackAlign() class="alignment-button">
+                        <i id="align-playback" class="fa-solid fa-arrow-right-arrow-left icon align-icon"></i>
+                    </button>
                 </div>
             </div>
         </div>
