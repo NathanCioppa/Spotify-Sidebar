@@ -301,12 +301,25 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 
 }
 #current-track{
+    display: inline-block;
     font-size: 3vh;
     font-weight: bold;
     margin-right: 1vh;
+    width: 24vh;
+    height: 10vh;
+    line-height: 1.1;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #current-artist{
+    width: 24vh;
     font-size: 2.3vh;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #playback{
     flex-direction: row;

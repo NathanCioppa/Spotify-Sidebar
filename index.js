@@ -156,7 +156,6 @@ async function getCurrent() {
 
 async function getPlaylists() {
     const playlists = await get('https://api.spotify.com/v1/me/playlists?limit=50')
-    console.log(playlists)
     playlists.items.map((playlist)=>{
         const image = playlist.images[0] !== undefined ? playlist.images[0].url : 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg'
         const name = playlist.name
@@ -182,7 +181,7 @@ function showPlaylists() {
 
         const name = document.createElement('span')
         name.className = 'playlist-name'
-        name.innerText = playlistInfo.name.length > 35 ? playlistInfo.name.slice(0,35)+'...' : playlistInfo.name
+        name.innerText = playlistInfo.name
         name.title = playlistInfo.name
 
         const buttons = document.createElement('div')
@@ -263,7 +262,20 @@ async function resume() {
 }
 
 async function playPlaylist(id, shuffle) {
-    console.log(id, shuffle)
+    console.log(id)
+    try {
+        await fetch('https://api.spotify.com/v1/me/player/play', {
+            method: 'PUT',
+            headers: {
+                'Authorization' : 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                'context_uri' : id,
+            }),
+        })
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 function progressBar() {
@@ -444,11 +456,12 @@ function rgbToHex(r, g, b){
 
 function reloadContents() {
     elem('greeting').innerText = 'Good '+getGreeting()+','
-    elem('current-track').innerText = info.current.track.length > 25 ? info.current.track.slice(0,25) + '...' : info.current.track
+    elem('current-track').innerText = info.current.track
     elem('current-track').title = info.current.track
     elem('current-link').href = info.current.link
     elem('current-image').src = info.current.cover
     elem('current-artist').innerText = info.current.artist
+    elem('current-artist').title = info.current.artist
     elem('play-icon').className = info.playback.playing ? 'fa-solid fa-pause playback-icon' : 'fa-solid fa-play playback-icon'
     progressBar()
 }
