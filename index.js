@@ -173,6 +173,9 @@ function showPlaylists() {
         const playlist = document.createElement('div')
         playlist.className = 'playlist'
 
+        const infoDiv = document.createElement('div')
+        infoDiv.className = 'playlist-info-div'
+
         const image = document.createElement('img')
         image.className = 'playlist-image'
         image.src = playlistInfo.image
@@ -182,15 +185,28 @@ function showPlaylists() {
         name.innerText = playlistInfo.name.length > 35 ? playlistInfo.name.slice(0,35)+'...' : playlistInfo.name
         name.title = playlistInfo.name
 
+        const buttons = document.createElement('div')
+        buttons.className = 'playlist-buttons-container'
+
         const playButton = document.createElement('button')
         playButton.id = playlistInfo.uri
-        playButton.className = 'playlist-play-button'
+        playButton.className = 'playlist-button'
+        playButton.setAttribute('onclick', 'playPlaylist(this.id, false)')
+        const playIcon = document.createElement('i')
+        playIcon.className = 'fa-solid fa-play icon playlist-button-icon'
+        playButton.append(playIcon)
 
         const shuffleButton = document.createElement('button')
         shuffleButton.id = playlistInfo.uri
-        shuffleButton.className = 'playlist-shuffle-button'
+        shuffleButton.className = 'playlist-button'
+        shuffleButton.setAttribute('onclick', 'playPlaylist(this.id, true)')
+        const shuffleIcon = document.createElement('i')
+        shuffleIcon.className = 'fa-solid fa-shuffle icon playlist-button-icon'
+        shuffleButton.append(shuffleIcon)
 
-        playlist.append(image, name, shuffleButton, playButton)
+        buttons.append(shuffleButton, playButton)
+        infoDiv.append(name, buttons)
+        playlist.append(image, infoDiv)
 
         elem('playlists').append(playlist)
     })
@@ -244,6 +260,10 @@ async function resume() {
     } catch (error) {
         console.log('error resume')
     }
+}
+
+async function playPlaylist(id, shuffle) {
+    console.log(id, shuffle)
 }
 
 function progressBar() {

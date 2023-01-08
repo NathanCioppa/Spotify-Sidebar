@@ -91,19 +91,50 @@ div {
 #playlists{
     width: 41vh;
     height: 51vh;
-    overflow: scroll;
+    overflow: auto;
     overflow-x: hidden;
 }
 .playlist{
 flex-direction: row;
 margin-top: 1vh;
+border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+.playlist-info-div{
+    justify-content: space-between;
 }
 .playlist-image{
     width: 8vh;
     height: 8vh;
 }
 .playlist-name{
-    padding: 1vh;
+    padding: 0.5vh;
+    font-size: 2.2vh;
+    width: 28vh;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+}
+.playlist-buttons-container{
+    flex-direction: row;
+    padding: 0.5vh;
+}
+.playlist-button{
+    width: 4vh;
+    height: 4vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100vh;
+    border: none;
+    background-color: transparent;
+}
+.playlist-button:hover{
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.playlist-button-icon{
+    font-size: 3vh;
+    color: white;
 }
 .small-icon-button{
     width: 3.5vh;
