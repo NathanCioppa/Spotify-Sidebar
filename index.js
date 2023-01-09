@@ -10,12 +10,14 @@ let info = {
         cover: 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg',
         link: '',
         position: '',
-        length: ''
+        length: '',
     },
     playlists:[],
     playback: {
         data: '',
-        playing: false
+        playing: false,
+        shuffle: false,
+        queue: []
     },
 }
 
@@ -137,21 +139,35 @@ async function signIn() {
 async function getCurrent() {
     const playing = await get('https://api.spotify.com/v1/me/player')
     if(playing === undefined) return;
+    info.playback.shuffle = playing.shuffle_state
     if(playing.is_playing) {
         info.playback.playing = true
         const data = await get('https://api.spotify.com/v1/me/player/currently-playing')
+        const current = info.current
 
-        info.current.data = data
-        info.current.track = data.item.name
-        info.current.artist = data.item.artists[0].name
-        info.current.cover = data.item.album.images[1].url
-        info.current.link = data.item.external_urls.spotify
-        info.current.length = data.item.duration_ms
-        info.current.position = data.progress_ms        
+        if(current.link !== data.item.external_urls.spotify) {
+            current.data = data 
+            current.track = data.item.name
+            current.artist = data.item.artists[0].name
+            current.cover = data.item.album.images[1].url
+            current.link = data.item.external_urls.spotify
+
+            await getQueue()
+        }
+        current.length = data.item.duration_ms
+        current.position = data.progress_ms
 
     } else {info.playback.playing = false}
-
     reloadContents()
+}
+
+async function toggleShuffle(shuffle) {
+    await fetch('https://api.spotify.com/v1/me/player/shuffle?state='+shuffle, {
+        method: 'PUT',
+        headers:{
+            'Authorization' : 'Bearer ' + token
+        }
+    })
 }
 
 async function getPlaylists() {
@@ -180,7 +196,7 @@ function showPlaylists() {
         image.src = playlistInfo.image
 
         const name = document.createElement('span')
-        name.className = 'playlist-name'
+        name.className = 'list-name'
         name.innerText = playlistInfo.name
         name.title = playlistInfo.name
 
@@ -212,7 +228,63 @@ function showPlaylists() {
 }
 
 async function getQueue() {
+    let newQueue = []
     const data = await get('https://api.spotify.com/v1/me/player/queue')
+    data.queue.map((trackInfo) => {
+        const image = trackInfo.album.images[1].url
+        const name = trackInfo.name
+        const artist = trackInfo.artists[0].name
+        const id = trackInfo.uri
+        newQueue.push({image,name,artist,id})
+    })
+    info.playback.queue = newQueue
+    showQueue()
+}
+
+function showQueue() {
+    elem('queue').innerHTML = ''
+
+    const queue = info.playback.queue
+    queue.map((track) => {
+        const container = document.createElement('div')
+        container.className = 'queued-track'
+
+        const image = document.createElement('img')
+        image.className = 'queue-image'
+        image.src = track.image
+
+        const name = document.createElement('span')
+        name.className = 'list-name'
+        name.innerText = track.name
+        name.title = track.name
+
+        const artist = document.createElement('span')
+        artist.className = 'queue-artist'
+        artist.innerText = track.artist
+        artist.title = track.artist
+
+        const playButton = document.createElement('button')
+        playButton.title = 'Play track now'
+        playButton.innerText = '>'
+
+        const queueNextButton = document.createElement('button')
+        queueNextButton.title = 'Play track next'
+        queueNextButton.innerText = '^'
+
+        const remeoveButton = document.createElement('button')
+        remeoveButton.title = 'Remove from queue'
+        remeoveButton.innerText = 'x'
+
+        const buttonDiv = document.createElement('div')
+        buttonDiv.style.flexDirection = 'row'
+        buttonDiv.append(playButton, queueNextButton, remeoveButton)
+
+        const infoDiv = document.createElement('div')
+        infoDiv.append(name, artist, buttonDiv)
+
+        container.append(image, infoDiv)
+        elem('queue').append(container)
+    })
 }
 
 async function next() {
@@ -262,7 +334,7 @@ async function resume() {
 }
 
 async function playPlaylist(id, shuffle) {
-    console.log(id)
+    await toggleShuffle(shuffle)
     try {
         await fetch('https://api.spotify.com/v1/me/player/play', {
             method: 'PUT',
@@ -469,7 +541,6 @@ function reloadContents() {
 async function showContent() {
     elem('name').innerText=info.user.display_name
     elem('user-image').src=info.user.images[0].url
-    await getQueue()
     elem('sign-in').style.display='none'
     elem('app').style.display='flex'
 }
