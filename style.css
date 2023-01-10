@@ -126,7 +126,7 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 100vh;
+    border-radius: 1vh;
     border: none;
     background-color: transparent;
 }
@@ -150,6 +150,23 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 .queue-artist{
     font-size: 1.5vh;
     margin-left: 0.5vh;
+}
+.queue-icon{
+    color: white;
+}
+.queue-button{
+    background-color: red;
+    height: 3.5vh;
+    width: 3.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    border-radius: 1vh;
+}
+.queue-button:hover{
+    background-color: rgba(255, 255, 255, 0.1);
 }
 .small-icon-button{
     width: 3.5vh;

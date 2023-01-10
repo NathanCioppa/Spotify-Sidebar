@@ -17,7 +17,8 @@ let info = {
         data: '',
         playing: false,
         shuffle: false,
-        queue: []
+        queue: [],
+        skip: []
     },
 }
 
@@ -41,6 +42,9 @@ function elemClass(className) {
 }
 function getLocal(key) {
     return window.localStorage.getItem(key)
+}
+function create(element) {
+    return document.createElement(element)
 }
 
 async function get(endpoint) {
@@ -151,9 +155,9 @@ async function getCurrent() {
             current.artist = data.item.artists[0].name
             current.cover = data.item.album.images[1].url
             current.link = data.item.external_urls.spotify
-
-            await getQueue()
+            await checkForSkip(data.item.uri)
         }
+        await getQueue()
         current.length = data.item.duration_ms
         current.position = data.progress_ms
 
@@ -185,37 +189,37 @@ async function getPlaylists() {
 function showPlaylists() {
     const playlists = info.playlists
     playlists.map((playlistInfo) => {
-        const playlist = document.createElement('div')
+        const playlist = create('div')
         playlist.className = 'playlist'
 
-        const infoDiv = document.createElement('div')
+        const infoDiv = create('div')
         infoDiv.className = 'playlist-info-div'
 
-        const image = document.createElement('img')
+        const image = create('img')
         image.className = 'playlist-image'
         image.src = playlistInfo.image
 
-        const name = document.createElement('span')
+        const name = create('span')
         name.className = 'list-name'
         name.innerText = playlistInfo.name
         name.title = playlistInfo.name
 
-        const buttons = document.createElement('div')
+        const buttons = create('div')
         buttons.className = 'playlist-buttons-container'
 
-        const playButton = document.createElement('button')
+        const playButton = create('button')
         playButton.id = playlistInfo.uri
         playButton.className = 'playlist-button'
-        playButton.setAttribute('onclick', 'playPlaylist(this.id, false)')
-        const playIcon = document.createElement('i')
+        playButton.setAttribute('onclick', 'playItem(this.id, false)')
+        const playIcon = create('i')
         playIcon.className = 'fa-solid fa-play icon playlist-button-icon'
         playButton.append(playIcon)
 
-        const shuffleButton = document.createElement('button')
+        const shuffleButton = create('button')
         shuffleButton.id = playlistInfo.uri
         shuffleButton.className = 'playlist-button'
-        shuffleButton.setAttribute('onclick', 'playPlaylist(this.id, true)')
-        const shuffleIcon = document.createElement('i')
+        shuffleButton.setAttribute('onclick', 'playItem(this.id, true)')
+        const shuffleIcon = create('i')
         shuffleIcon.className = 'fa-solid fa-shuffle icon playlist-button-icon'
         shuffleButton.append(shuffleIcon)
 
@@ -246,40 +250,45 @@ function showQueue() {
 
     const queue = info.playback.queue
     queue.map((track) => {
-        const container = document.createElement('div')
+        const container = create('div')
         container.className = 'queued-track'
 
-        const image = document.createElement('img')
+        const image = create('img')
         image.className = 'queue-image'
         image.src = track.image
 
-        const name = document.createElement('span')
+        const name = create('span')
         name.className = 'list-name'
         name.innerText = track.name
         name.title = track.name
 
-        const artist = document.createElement('span')
+        const artist = create('span')
         artist.className = 'queue-artist'
         artist.innerText = track.artist
         artist.title = track.artist
 
-        const playButton = document.createElement('button')
-        playButton.title = 'Play track now'
-        playButton.innerText = '>'
-
-        const queueNextButton = document.createElement('button')
+        const queueNextButton = create('button')
         queueNextButton.title = 'Play track next'
-        queueNextButton.innerText = '^'
+        queueNextButton.className = 'queue-button'
+        queueNextButton.setAttribute(`onclick`, `nextInQueue('${track.id}')`)
+        const queueNextIcon = create('i')
+        queueNextIcon.className = 'fa-solid fa-arrow-up-short-wide icon queue-icon'
+        queueNextButton.append(queueNextIcon)
 
-        const remeoveButton = document.createElement('button')
-        remeoveButton.title = 'Remove from queue'
-        remeoveButton.innerText = 'x'
+        const queueRemoveButton = create('button')
+        queueRemoveButton.className = 'queue-button'
+        queueRemoveButton.title = 'Skip on next play'
+        queueRemoveButton.setAttribute('onclick',`addToSkip('${track.id}')`)
+        const removeButtonIcon = create('i')
+        removeButtonIcon.className = 'fa-solid fa-circle-minus icon queue-icon'
+        queueRemoveButton.append(removeButtonIcon)
 
-        const buttonDiv = document.createElement('div')
+        const buttonDiv = create('div')
         buttonDiv.style.flexDirection = 'row'
-        buttonDiv.append(playButton, queueNextButton, remeoveButton)
+        buttonDiv.style.marginLeft = '0.5vh'
+        buttonDiv.append(queueNextButton, queueRemoveButton)
 
-        const infoDiv = document.createElement('div')
+        const infoDiv = create('div')
         infoDiv.append(name, artist, buttonDiv)
 
         container.append(image, infoDiv)
@@ -333,7 +342,7 @@ async function resume() {
     }
 }
 
-async function playPlaylist(id, shuffle) {
+async function playItem(id, shuffle) {
     await toggleShuffle(shuffle)
     try {
         await fetch('https://api.spotify.com/v1/me/player/play', {
@@ -347,6 +356,22 @@ async function playPlaylist(id, shuffle) {
         })
     } catch (error) {
         console.log(error)
+    }
+}
+
+async function nextInQueue(trackUri) {
+    post(`https://api.spotify.com/v1/me/player/queue?uri=${trackUri}`)
+}
+
+function addToSkip(trackUri) {
+    info.playback.skip.push(trackUri)
+}
+
+async function checkForSkip(currentUri) {
+    const skip = info.playback.skip
+    if(skip.includes(currentUri)) {
+        info.playback.skip[skip.indexOf(currentUri)] = 'skipped'
+        await next()
     }
 }
 
@@ -388,12 +413,12 @@ function setView(element) {
 }
 
 function appendColor(color) {
-    const button = document.createElement('button')
+    const button = create('button')
     button.title = 'Set color'
     button.className = 'quick-color'
     button.setAttribute('onclick', 'setOldColor(this)')
 
-    const input = document.createElement('input')
+    const input = create('input')
     input.type = 'color'
     input.title = 'Set color'
     input.className = 'previous-color'
