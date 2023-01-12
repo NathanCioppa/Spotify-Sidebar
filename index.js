@@ -133,6 +133,7 @@ async function signIn() {
         getCurrent()
         showContent()
         setInterval(getCurrent, 1000)
+        setInterval(getQueue, 5000)
     } else {
         console.log('invalid access token')
         window.localStorage.removeItem('token')
@@ -156,8 +157,8 @@ async function getCurrent() {
             current.cover = data.item.album.images[1].url
             current.link = data.item.external_urls.spotify
             await checkForSkip(data.item.uri)
+            await getQueue()
         }
-        await getQueue()
         current.length = data.item.duration_ms
         current.position = data.progress_ms
 
@@ -252,6 +253,7 @@ function showQueue() {
     queue.map((track) => {
         const container = create('div')
         container.className = 'queued-track'
+        container.style.backgroundColor = info.playback.skip.includes(track.id) ? 'rgb(225,0,0,0.2)' : 'transparent'
 
         const image = create('img')
         image.className = 'queue-image'
@@ -277,7 +279,7 @@ function showQueue() {
 
         const queueRemoveButton = create('button')
         queueRemoveButton.className = 'queue-button'
-        queueRemoveButton.title = 'Skip on next play'
+        queueRemoveButton.title = !info.playback.skip.includes(track.id) ? 'Skip on next play' : "Don't skip"
         queueRemoveButton.setAttribute('onclick',`addToSkip('${track.id}')`)
         const removeButtonIcon = create('i')
         removeButtonIcon.className = 'fa-solid fa-circle-minus icon queue-icon'
@@ -361,16 +363,23 @@ async function playItem(id, shuffle) {
 
 async function nextInQueue(trackUri) {
     post(`https://api.spotify.com/v1/me/player/queue?uri=${trackUri}`)
+    await getQueue()
 }
 
 function addToSkip(trackUri) {
-    info.playback.skip.push(trackUri)
+    const skips = info.playback.skip
+    !skips.includes(trackUri) ? info.playback.skip.push(trackUri) : info.playback.skip = skips.filter(item => {
+        return item !== trackUri
+    })
+    showQueue()
 }
 
 async function checkForSkip(currentUri) {
     const skip = info.playback.skip
     if(skip.includes(currentUri)) {
-        info.playback.skip[skip.indexOf(currentUri)] = 'skipped'
+        info.playback.skip = skip.filter(item => {
+            return item !== currentUri
+        })
         await next()
     }
 }
