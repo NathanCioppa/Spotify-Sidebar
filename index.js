@@ -1,6 +1,7 @@
-
+//token will be set to the user's authorization token after logging in
 let token = null
 
+//stores information about the user, currently playing track, playlists, and playback controls as they use the app
 let info = {
     user: '',
     current: {
@@ -22,6 +23,7 @@ let info = {
     },
 }
 
+//stores information about the users customization settings
 let theme = {
     defautlColor: 'rgb(75, 255, 75)',
     customColors: [],
@@ -34,6 +36,7 @@ let theme = {
     }
 }
 
+//shortcuts for certain functions because im lazy
 function elem(elementId) {
     return document.getElementById(elementId)
 }
@@ -46,7 +49,6 @@ function getLocal(key) {
 function create(element) {
     return document.createElement(element)
 }
-
 async function get(endpoint) {
     try {
         const result = await fetch(endpoint, {
@@ -58,7 +60,6 @@ async function get(endpoint) {
     } catch (error) {
         console.log('ERROR GET: '+endpoint)
     }
-    
 }
 async function post(endpoint) {
     try {
@@ -69,9 +70,10 @@ async function post(endpoint) {
     } catch (error) {
         console.log('ERROR POST: '+endpoint)
     }
-    
 }
 
+
+//automatically tries to log in if the user has a token in local storage
 function pageLoad() {
     const storedToken = window.localStorage.getItem('token')
     if(storedToken !== null) {
@@ -79,6 +81,7 @@ function pageLoad() {
         signIn()
     }
 
+//sets previous customization settings if there any in local storage
     theme.background.direction = getLocal('gradient') !== null ? getLocal('gradient') : theme.background.direction
 
     if(getLocal('alignment') !== null) {document.body.style.alignItems = getLocal('alignment')}
@@ -121,6 +124,8 @@ async function signIn() {
     })
     const data = await result.json()
 
+//checks if the token is valid by checking if a display name is returned
+//if the token is valid, the user is logged in and the app loads, token is stored in local storage
     if(data.display_name !== undefined) {
         token = inputToken
         info.user = data
@@ -135,21 +140,27 @@ async function signIn() {
         setInterval(getCurrent, 1000)
         setInterval(getQueue, 5000)
     } else {
+//token is removed from local storage and input is cleared if the user submits an invalid token
         console.log('invalid access token')
         window.localStorage.removeItem('token')
         elem('token-input').value = ''
     }
 }
 
+
+//gets the currently playing track and sets its information in the info object
 async function getCurrent() {
     const playing = await get('https://api.spotify.com/v1/me/player')
     if(playing === undefined) return;
+
     info.playback.shuffle = playing.shuffle_state
     if(playing.is_playing) {
         info.playback.playing = true
         const data = await get('https://api.spotify.com/v1/me/player/currently-playing')
         const current = info.current
 
+//current track info is only updated if a different song is playing 
+//if the information is updated, the app checks if the song should be skipped, then updates the queue
         if(current.link !== data.item.external_urls.spotify) {
             current.data = data 
             current.track = data.item.name
@@ -187,6 +198,8 @@ async function getPlaylists() {
     showPlaylists()
 }
 
+//constructs and displays an element for each of the user's playlists
+//each playlist has buttons to start playing with and without shuffle
 function showPlaylists() {
     const playlists = info.playlists
     playlists.map((playlistInfo) => {
@@ -232,6 +245,7 @@ function showPlaylists() {
     })
 }
 
+//updates the playback queue object, setting it to the current queue
 async function getQueue() {
     let newQueue = []
     const data = await get('https://api.spotify.com/v1/me/player/queue')
@@ -246,6 +260,8 @@ async function getQueue() {
     showQueue()
 }
 
+//constructs and displays an element for each track in the user's queue
+//queued tracks have buttons to be played next, or automatically skipped next time they are played
 function showQueue() {
     elem('queue').innerHTML = ''
 
@@ -344,6 +360,7 @@ async function resume() {
     }
 }
 
+//plays an item using its uri as the id perameter and starts shuffling if shuffle perameter is true
 async function playItem(id, shuffle) {
     await toggleShuffle(shuffle)
     try {
@@ -361,11 +378,14 @@ async function playItem(id, shuffle) {
     }
 }
 
+//sets a track to play next in the queue
 async function nextInQueue(trackUri) {
     post(`https://api.spotify.com/v1/me/player/queue?uri=${trackUri}`)
     await getQueue()
 }
 
+//adds to the array of songs that will be automatically skipped next time they are played
+//songs are added to the array by a button in the queue
 function addToSkip(trackUri) {
     const skips = info.playback.skip
     !skips.includes(trackUri) ? info.playback.skip.push(trackUri) : info.playback.skip = skips.filter(item => {
@@ -374,6 +394,7 @@ function addToSkip(trackUri) {
     showQueue()
 }
 
+//checks if the current song should be automatically skipped
 async function checkForSkip(currentUri) {
     const skip = info.playback.skip
     if(skip.includes(currentUri)) {
@@ -381,6 +402,16 @@ async function checkForSkip(currentUri) {
             return item !== currentUri
         })
         await next()
+    }
+}
+
+async function search() {
+    try {
+        const searchTerm = elem('search-bar').value
+        console.log(searchTerm)
+        console.log(await get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track,album,artist`))
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -405,6 +436,7 @@ function getGreeting() {
     return hour < 5 ? 'evening' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening'
 }
 
+//changes which view is shown when navbar buttons are pressed
 function setView(element) {
     const buttons = elemClass('nav-icon')
     const selected = element.children[0]
@@ -421,30 +453,15 @@ function setView(element) {
     }
 }
 
-function appendColor(color) {
-    const button = create('button')
-    button.title = 'Set color'
-    button.className = 'quick-color'
-    button.setAttribute('onclick', 'setOldColor(this)')
-
-    const input = create('input')
-    input.type = 'color'
-    input.title = 'Set color'
-    input.className = 'previous-color'
-    input.setAttribute('value', color)
-    input.disabled = true
-    
-    button.append(input)
-    return button
-}
-
 function previewColor() {
     elem('set-color-icon').style.color = elem('color-picker').value
 }
 
+//sets a newly selected color as the theme for the app and adds it to previously used colors
 function setNewColor() {
 
     const newColor = elem('color-picker').value
+//hexcolor is converted to rgb values in order to be accessed from the theme object
     const red = parseInt(newColor.slice(1,3),16)
     const green = parseInt(newColor.slice(3,5),16)
     const blue = parseInt(newColor.slice(5,7),16)
@@ -460,6 +477,7 @@ function setNewColor() {
 
     const colors = theme.customColors
     let push = true
+//if the new color is already in the users previously used colors, it will not be added again
     for(let i = 0; i < colors.length; i++) {
         if(colors[i] === color) {
             push = false
@@ -480,6 +498,7 @@ function setNewColor() {
     window.localStorage.setItem('blue', blue)
 }
 
+//sets a previous color as the current theme
 function setOldColor(element) {
     const color = element.children[0].value
     const red = parseInt(color.slice(1,3),16)
@@ -498,6 +517,25 @@ function setOldColor(element) {
     window.localStorage.setItem('blue', theme.blue)
 }
 
+//constructs an element which displays a previous color
+function appendColor(color) {
+    const button = create('button')
+    button.title = 'Set color'
+    button.className = 'quick-color'
+    button.setAttribute('onclick', 'setOldColor(this)')
+
+    const input = create('input')
+    input.type = 'color'
+    input.title = 'Set color'
+    input.className = 'previous-color'
+    input.setAttribute('value', color)
+    input.disabled = true
+    
+    button.append(input)
+    return button
+}
+
+//displays previously used colors, clicking the color sets it as the theme color, no more than 20 colors are stored
 function mapPreviousColors(color) {
     const colors = theme.customColors
     if(colors.length > 20) {
@@ -507,6 +545,8 @@ function mapPreviousColors(color) {
     elem('previous-colors').append(appendColor(color))
 }
 
+//sets changes made to the theme
+//onPageLoad perameter should only be true if the function is being called when the page is first loaded, sets home button color
 function changeTheme(onPageLoad) {
     const color = theme.color
 
@@ -521,6 +561,7 @@ function changeTheme(onPageLoad) {
     changeGradientArrows()
 }
 
+//changes the background gradient of the app by using the id of the icon inside the selected gradient button
 function changeGradient(element) {
     const selectedId = element.children[0].id
     theme.background.direction = selectedId.replaceAll('-', ' ')
@@ -528,6 +569,7 @@ function changeGradient(element) {
     window.localStorage.setItem('gradient', theme.background.direction)
     changeGradientArrows()
 }
+//sets the style of the currently selected gradient arrow button
 function changeGradientArrows() {
     const arrows = elemClass('arrow-icon')
     for(let i = 0; i < arrows.length; i++) {
@@ -539,6 +581,7 @@ function setBackground() {
     document.body.style.backgroundImage = `linear-gradient(${theme.background.direction}, rgb(20,20,20), rgba(${theme.red},${theme.green},${theme.blue}, 0.2))`
 }
 
+//sets the theme to the default color
 function setDefaultColor() {
     theme.color = theme.defautlColor
     theme.red = '75'
@@ -553,6 +596,8 @@ function setDefaultColor() {
     window.localStorage.setItem('blue', theme.blue)
 }
 
+//converts an rgb color to a hexcolor
+//rgb colors are used to set the theme instead of hexcolors
 function rgbToHex(r, g, b){
     const red = Number(r) < 16 ? `0${Number(r).toString(16)}` : Number(r).toString(16)
     const green = Number(g) < 16 ? `0${Number(g).toString(16)}` : Number(g).toString(16)
@@ -560,6 +605,8 @@ function rgbToHex(r, g, b){
     return '#'+red+green+blue
 }
 
+//reloads elements on the page that may be constantly changing, mainly the current track and playback elements
+//function is always called every second with the getCurrent() function, as well as when 
 function reloadContents() {
     elem('greeting').innerText = 'Good '+getGreeting()+','
     elem('current-track').innerText = info.current.track
@@ -572,6 +619,7 @@ function reloadContents() {
     progressBar()
 }
 
+//shows the app and hides the sign in page once signed in, called upon signing in
 async function showContent() {
     elem('name').innerText=info.user.display_name
     elem('user-image').src=info.user.images[0].url
@@ -587,6 +635,7 @@ function signOut() {
     
 }
 
+//switches the side of the window that the entire app is aligned to
 function switchAlign() {
     const bodyStyle = document.body.style
     bodyStyle.alignItems = bodyStyle.alignItems === 'flex-end' ? 'flex-start' : 'flex-end'
@@ -595,6 +644,7 @@ function switchAlign() {
     window.localStorage.setItem('alignment', bodyStyle.alignItems)
 }
 
+//swaps the position of the current playback image and current playback name, artist, and playback buttons
 function playbackAlign() {
     const element = elem('playing-alignment').style
     element.flexDirection = element.flexDirection === 'row-reverse' ? 'row' : 'row-reverse' 
@@ -603,6 +653,7 @@ function playbackAlign() {
     window.localStorage.setItem('playback-align', element.flexDirection)
 }
 
+//swaps the side of the app that the navbar is aliged to
 function navbarAlign() {
     const element = elem('actions').style
     element.flexDirection = element.flexDirection === 'row-reverse' ? 'row' : 'row-reverse'

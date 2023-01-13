@@ -12,6 +12,13 @@ body {
 button:hover{
     cursor: pointer;
 }
+div {
+    display: flex;
+    flex-direction: column;
+}
+.icon{
+    vertical-align: middle;
+}
 #sign-in {
     display: flex;
     flex-direction: column;
@@ -22,10 +29,9 @@ button:hover{
     top: 10%;
     transform: translate(-50%);
 }
-div {
-    display: flex;
-    flex-direction: column;
-}
+
+
+
 .welcome{
     font-size: 4vh;
     font-weight: bold;
@@ -51,9 +57,9 @@ div {
     font-size: 3vh;
     color: rgb(75, 255, 75);
 }
-.align-items{
-    align-items: flex-start;
-}
+
+
+
 #app {
     display: none;
     justify-content: space-between;
@@ -88,12 +94,45 @@ div {
 .nav-icon{
     font-size: 3vh;
 }
+
+
+
+#view{
+    width: 41vh;
+}
+.view-div{
+    display: none;
+}
+.view-title{
+    font-size: 4vh;
+    font-weight: bold;
+    border-bottom: 1px solid white;
+    margin-bottom: 2vh;
+}
+.view-subtitle{
+    font-size: 2.3vh;
+    width: fit-content;
+    border-bottom: 1px solid white;
+    margin: 2px;
+}
 .list-view{
     width: 41vh;
     height: 51vh;
     overflow: auto;
     overflow-x: hidden;
 }
+
+
+
+#nav-bar-home{
+    color: rgb(75, 255, 75);
+}
+#home-view{
+    display: flex;
+}
+
+
+
 .playlist{
 flex-direction: row;
 margin-top: 1vh;
@@ -138,6 +177,8 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     color: white;
 }
 
+
+
 .queued-track{
     flex-direction: row;
     margin-top: 0.5vh;
@@ -153,6 +194,7 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
 .queue-icon{
     color: white;
+    font-size: 2vh;
 }
 .queue-button{
     background-color: red;
@@ -168,69 +210,44 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 .queue-button:hover{
     background-color: rgba(255, 255, 255, 0.1);
 }
-.small-icon-button{
-    width: 3.5vh;
-    height: 3.5vh;
-    display: flex;
+
+
+
+#search-container{
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    margin: 0.5vh;
-    background-color: rgba(255, 255, 255, 0.1);
+    justify-content: space-between;
+}
+#search-bar{
+    background-color: transparent;
     border: none;
-    border-radius: 1vh;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    font-size: 2.5vh;
+    width: 35vh;
 }
-.arrow-icon{
+#search-bar:focus{
+    outline: none;
+    border-bottom: 1px solid white;
+}
+#submit-search{
+    background-color: transparent;
+    border-radius: 100vh;
+    border: none;
+    height: 5vh;
+    width: 5vh;
+    padding: 0.5vh;
+}
+#submit-search:hover{
+    background-color: rgba(255, 255, 255, 0.1);
+}
+#search-icon{
+    color: white;
     font-size: 3vh;
-    color: black
 }
-#to-right{
-    color: rgb(75, 255, 75);
-}
-#to-left{
-    rotate: 180deg;
-}
-#to-top{
-    rotate: 270deg;
-}
-#to-bottom{
-    rotate: 90deg;
-}
-#to-bottom-right{
-    rotate: 45deg;
-}
-#to-top-right{
-    rotate: 315deg;
-}
-#to-bottom-left{
-    rotate: 135deg;
-}
-#to-top-left{
-    rotate: 225deg;
-}
-#view{
-    width: 41vh;
-}
-.view-div{
-    display: none;
-}
-.view-title{
-    font-size: 4vh;
-    font-weight: bold;
-    border-bottom: 1px solid white;
-    margin-bottom: 2vh;
-}
-#nav-bar-home{
-    color: rgb(75, 255, 75);
-}
-#home-view{
-    display: flex;
-}
-.view-subtitle{
-    font-size: 2.3vh;
-    width: fit-content;
-    border-bottom: 1px solid white;
-    margin: 2px;
-}
+
+
+
 #new-color-title{
     font-size: 2.3vh;
     width: fit-content;
@@ -290,6 +307,9 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 #default-color:hover{
     cursor: pointer;
 }
+
+
+
 .alignment-button{
     width: 5vh;
     height: 5vh;
@@ -305,6 +325,48 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 #align-overall{
     rotate: 90deg;
 }
+.small-icon-button{
+    width: 3.5vh;
+    height: 3.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5vh;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 1vh;
+}
+.arrow-icon{
+    font-size: 3vh;
+    color: black
+}
+#to-right{
+    color: rgb(75, 255, 75);
+}
+#to-left{
+    rotate: 180deg;
+}
+#to-top{
+    rotate: 270deg;
+}
+#to-bottom{
+    rotate: 90deg;
+}
+#to-bottom-right{
+    rotate: 45deg;
+}
+#to-top-right{
+    rotate: 315deg;
+}
+#to-bottom-left{
+    rotate: 135deg;
+}
+#to-top-left{
+    rotate: 225deg;
+}
+
+
+
 #currently-playing {
     bottom: 1vh;
 }
@@ -352,6 +414,9 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+
+
 #playback{
     flex-direction: row;
     justify-content:space-evenly ;
@@ -369,11 +434,6 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 .playback-button:active{
     background-color: rgba(75, 255, 75, 0.5)
 }
-
-.icon{
-    vertical-align: middle;
-}
-
 .playback-icon{
     vertical-align:middle;
     font-size: 3vh;
