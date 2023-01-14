@@ -210,7 +210,7 @@ function showPlaylists() {
         infoDiv.className = 'playlist-info-div'
 
         const image = create('img')
-        image.className = 'playlist-image'
+        image.className = 'list-image'
         image.src = playlistInfo.image
 
         const name = create('span')
@@ -272,7 +272,7 @@ function showQueue() {
         container.style.backgroundColor = info.playback.skip.includes(track.id) ? 'rgb(225,0,0,0.2)' : 'transparent'
 
         const image = create('img')
-        image.className = 'queue-image'
+        image.className = 'list-image'
         image.src = track.image
 
         const name = create('span')
@@ -281,12 +281,12 @@ function showQueue() {
         name.title = track.name
 
         const artist = create('span')
-        artist.className = 'queue-artist'
+        artist.className = 'list-artist'
         artist.innerText = track.artist
         artist.title = track.artist
 
         const queueNextButton = create('button')
-        queueNextButton.title = 'Play track next'
+        queueNextButton.title = 'Play next in queue'
         queueNextButton.className = 'queue-button'
         queueNextButton.setAttribute(`onclick`, `nextInQueue('${track.id}')`)
         const queueNextIcon = create('i')
@@ -360,7 +360,7 @@ async function resume() {
     }
 }
 
-//plays an item using its uri as the id perameter and starts shuffling if shuffle perameter is true
+//plays an item using its uri as the id parameter and starts shuffling if shuffle parameter is true
 async function playItem(id, shuffle) {
     await toggleShuffle(shuffle)
     try {
@@ -405,14 +405,73 @@ async function checkForSkip(currentUri) {
     }
 }
 
-async function search() {
-    try {
-        const searchTerm = elem('search-bar').value
-        console.log(searchTerm)
-        console.log(await get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track,album,artist`))
-    } catch (error) {
-        console.log(error)
+//changes which type of items are displayed from a search (songs, albums, artists, playlists)
+function changeSearch(elementToShow) {
+    const views = elemClass('show-search')
+    for(let i = 0; i < views.length; i++) {
+        views[i].style.display = views[i].id.slice(views[i].id.indexOf('-')+1, views[i].id.length) === elementToShow ? 'flex' : 'none'
     }
+
+    const buttons = elemClass('change-search-button')
+    for(let i = 0; i < buttons.length; i++) {
+        buttons[i].style.backgroundColor = buttons[i].id === elementToShow ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.1)' 
+    }
+}
+
+async function search() {
+    const searchTerm = elem('search-bar').value
+    const data = await get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track,album,artist,playlist`)
+    console.log(data)
+    showSearchTracks(data.tracks.items)
+}
+
+//template for making elements displayed from a search
+function createSearchItems(name, artist, imageUrl) {
+    const container = create('div')
+    container.className = 'searched-item'
+
+    const imageElement = create('img')
+    imageElement.src = imageUrl
+    imageElement.className = 'list-image'
+
+    const nameElement = create('span')
+    nameElement.innerText = name
+    nameElement.className = 'list-name'
+
+    const artistElement = create('span')
+    artistElement.innerText = artist
+    artistElement.className = 'list-artist'
+
+    const infoDiv = create('div')
+    infoDiv.append(nameElement,artistElement)
+
+    container.append(imageElement,infoDiv)
+    return container
+}
+
+//creates and displays elements to show songs from a search
+function showSearchTracks(tracks) {
+    const searchTracks = elem('show-search-tracks')
+    searchTracks.innerHTML =''
+    tracks.map(track => {
+        const trackElement = createSearchItems(track.name, track.artists[0].name, track.album.images[1].url)
+
+//creates and appends a button which adds the song to the queue
+        const queueNextButton = create('button')
+        queueNextButton.className = 'searched-item-button'
+        queueNextButton.title = 'Add to queue'
+        queueNextButton.setAttribute('onclick', `nextInQueue('${track.uri}')`)
+        const queueNextButtonIcon = create('i')
+        queueNextButtonIcon.className = 'fa-solid fa-arrow-up-short-wide icon queue-icon'
+        queueNextButton.append(queueNextButtonIcon)
+        
+        const buttonDiv = create('div')
+        buttonDiv.className = 'searched-button-div'
+        buttonDiv.append(queueNextButton)
+
+        trackElement.childNodes[1].append(buttonDiv)
+        searchTracks.append(trackElement)
+    })
 }
 
 function progressBar() {

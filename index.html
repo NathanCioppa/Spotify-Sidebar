@@ -57,9 +57,19 @@
                 <div class="view-div" id="search-view">
                     <span class="view-title">Search</span>
                     <div id='search-container'>
-                        <input id="search-bar" type="text" placeholder="Search for something">
+                        <input id="search-bar" type="text" placeholder="Search Spotify">
                         <button id="submit-search" onclick=search()><i id="search-icon" class="fa-solid fa-magnifying-glass icon"></i></button>
                     </div>
+                    <div id="change-search">
+                        <button id="search-tracks" class="change-search-button" onclick=changeSearch(this.id)>Songs</button>
+                        <button id="search-albums" class="change-search-button" onclick=changeSearch(this.id)>Albums</button>
+                        <button id="search-artists" class="change-search-button" onclick=changeSearch(this.id)>Artists</button>
+                        <button id="search-playlists" class="change-search-button" onclick=changeSearch(this.id)>Playlists</button> 
+                    </div>
+                    <div class="show-search" id="show-search-tracks"></div>
+                    <div class="show-search" id="show-search-albums"></div>
+                    <div class="show-search" id="show-search-artists"></div>
+                    <div class="show-search" id="show-search-playlists"></div>
                 </div>
                 <div class="view-div" id="queue-view">
                     <span class="view-title">Queue</span>

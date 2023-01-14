@@ -121,6 +121,14 @@ div {
     overflow: auto;
     overflow-x: hidden;
 }
+.list-image{
+    width: 8vh;
+    height: 8vh;
+}
+.list-artist{
+    font-size: 1.5vh;
+    margin-left: 0.5vh;
+}
 
 
 
@@ -140,10 +148,6 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
 .playlist-info-div{
     justify-content: space-between;
-}
-.playlist-image{
-    width: 8vh;
-    height: 8vh;
 }
 .list-name{
     padding: 0.5vh;
@@ -183,14 +187,6 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     flex-direction: row;
     margin-top: 0.5vh;
     margin-bottom: 0.5vh;
-}
-.queue-image{
-    width: 8vh;
-    height: 8vh;
-}
-.queue-artist{
-    font-size: 1.5vh;
-    margin-left: 0.5vh;
 }
 .queue-icon{
     color: white;
@@ -244,6 +240,57 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 #search-icon{
     color: white;
     font-size: 3vh;
+}
+#change-search{
+    flex-direction: row;
+    justify-content: space-between;
+}
+.change-search-button{
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 100vh;
+    border: none;
+    padding: 1vh;
+    width: 9.5vh;
+    font-size: 2vh;
+}
+.change-search-button:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+#search-tracks{
+    background-color: rgba(255, 255, 255, 0.3);
+}
+.show-search{
+    margin-top: 1vh;
+    display: none;
+    width: 41vh;
+    height: 42vh;
+    overflow: auto;
+    overflow-x: hidden;
+}
+#show-search-tracks{
+    display: flex;
+}
+.searched-item{
+    flex-direction: row;
+    margin-bottom: 1vh;
+}
+.searched-button-div{
+    flex-direction: row;
+    margin-left: 0.5vh;
+}
+.searched-item-button{
+    width: 3.5vh;
+    height: 3.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    border-radius: 1vh;
+}
+.searched-item-button:hover{
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 
