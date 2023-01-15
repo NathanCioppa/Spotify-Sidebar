@@ -128,6 +128,20 @@ div {
 .list-artist{
     font-size: 1.5vh;
     margin-left: 0.5vh;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 30vh;
+}
+.list-name{
+    padding: 0.5vh;
+    padding-bottom: 0;
+    font-size: 2.2vh;
+    width: 28vh;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
 }
 
 
@@ -148,16 +162,6 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
 .playlist-info-div{
     justify-content: space-between;
-}
-.list-name{
-    padding: 0.5vh;
-    padding-bottom: 0;
-    font-size: 2.2vh;
-    width: 28vh;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-weight: bold;
 }
 .playlist-buttons-container{
     flex-direction: row;

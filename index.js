@@ -380,7 +380,7 @@ async function playItem(id, shuffle) {
 
 //sets a track to play next in the queue
 async function nextInQueue(trackUri) {
-    post(`https://api.spotify.com/v1/me/player/queue?uri=${trackUri}`)
+    await post(`https://api.spotify.com/v1/me/player/queue?uri=${trackUri}`)
     await getQueue()
 }
 
@@ -418,12 +418,24 @@ function changeSearch(elementToShow) {
     }
 }
 
+//check if the search bar is focused, if it is, then the enter key will call the search function
+let enterListener = false
+function toggleEnterListener(activate) {
+    enterListener = activate
+}
+addEventListener('keypress', e => {
+    if(e.key === 'Enter' && enterListener) {
+        search()
+    }
+})
+
 async function search() {
     const searchTerm = elem('search-bar').value
     const data = await get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track,album,artist,playlist`)
-    console.log(data)
     showSearchTracks(data.tracks.items)
     showSearchAlbums(data.albums.items)
+    showSearchArtists(data.artists.items)
+    showSearchPlaylists(data.playlists.items)
 }
 
 //template for making elements displayed from a search
@@ -438,16 +450,46 @@ function createSearchItems(name, artist, imageUrl) {
     const nameElement = create('span')
     nameElement.innerText = name
     nameElement.className = 'list-name'
+    nameElement.title = name
 
     const artistElement = create('span')
     artistElement.innerText = artist
     artistElement.className = 'list-artist'
+    artistElement.title = artist
 
     const infoDiv = create('div')
     infoDiv.append(nameElement,artistElement)
 
     container.append(imageElement,infoDiv)
     return container
+}
+
+//template for making a play button for searched items
+function createSearchPlayButton(itemUri, itemType) {
+    const playButton = create('button')
+        playButton.className = 'searched-item-button'
+        playButton.title = 'Play '+itemType
+        playButton.setAttribute('onclick', `playItem('${itemUri}',false)`)
+
+    const playButtonIcon = create('i')
+        playButtonIcon.className = 'fa-solid fa-play icon queue-icon'
+        playButton.append(playButtonIcon)
+
+    return playButton
+}
+
+//template for making a shuffle button for searched items
+function createSearchShuffleButton(itemUri, itemType) {
+    const shuffleButton = create('button')
+        shuffleButton.className = 'searched-item-button'
+        shuffleButton.title = 'Shuffle '+itemType
+        shuffleButton.setAttribute('onclick', `playItem('${itemUri}',true)`)
+
+    const shuffleButtonicon = create('i')
+        shuffleButtonicon.className = 'fa-solid fa-shuffle icon queue-icon'
+        shuffleButton.append(shuffleButtonicon)
+
+    return shuffleButton
 }
 
 //creates and displays elements to show songs from a search
@@ -481,28 +523,60 @@ function showSearchAlbums(albums) {
     albums.map(album => {
         const albumElement = createSearchItems(album.name, album.artists[0].name, album.images[1].url)
 
-//creates and appends buttons to play the album in order or shuffled
-        const playButton = create('button')
-        playButton.className = 'searched-item-button'
-        playButton.title = 'Play album'
-        playButton.setAttribute('onclick', `playItem('${album.uri}',false)`)
-        const playButtonIcon = create('i')
-        playButtonIcon.className = 'fa-solid fa-play icon queue-icon'
-        playButton.append(playButtonIcon)
-
-        const shuffleButton = create('button')
-        shuffleButton.className = 'searched-item-button'
-        shuffleButton.title = 'Shuffle album'
-        shuffleButton.setAttribute('onclick', `playItem('${album.uri}',true)`)
-        const shuffleButtonicon = create('i')
-        shuffleButtonicon.className = 'fa-solid fa-shuffle icon queue-icon'
-        shuffleButton.append(shuffleButtonicon)
+        const playButton = createSearchPlayButton(album.uri, 'album')
+        const shuffleButton = createSearchShuffleButton(album.uri, 'album')
 
         const buttonDiv = create('div')
         buttonDiv.className = 'searched-button-div'
         buttonDiv.append(playButton, shuffleButton)
         albumElement.childNodes[1].append(buttonDiv)
         searchAlbums.append(albumElement)
+    })
+}
+
+function showSearchArtists(artists) {
+    const searchArtists = elem('show-search-artists')
+    searchArtists.innerHTML = ''
+    artists.map(artist => {
+//display artist genres on searched artists
+        let genres = ''
+        for(let i = 0; i < 3; i++) {
+            if (artist.genres[i] !== undefined) {
+                genres += ', ' + artist.genres[i]
+            }
+        }
+        genres = genres.slice(2, genres.length)
+        const image = artist.images.length !== 0 ? artist.images[0].url : 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg'
+        const artistElement = createSearchItems(artist.name, genres, image)
+
+        const playButton = createSearchPlayButton(artist.uri, 'artist')
+        const shuffleButton = createSearchShuffleButton(artist.uri, 'artist')
+        
+        const buttonDiv = create('div')
+        buttonDiv.className = 'searched-button-div'
+        buttonDiv.append(playButton, shuffleButton)
+        artistElement.childNodes[1].append(buttonDiv)
+        searchArtists.append(artistElement)
+    })
+}
+
+function showSearchPlaylists(playlists) {
+    const searchPlaylists = elem('show-search-playlists')
+    searchPlaylists.innerHTML = ''
+    playlists.map(playlist => {
+        const image = playlist.images.length !== 0 ? playlist.images[0].url : 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg'
+        const playlistElement = createSearchItems(playlist.name, playlist.owner.display_name, image)
+
+        const playButton = createSearchPlayButton(playlist.uri, 'playlist')
+        const shuffleButton = createSearchShuffleButton(playlist.uri, 'playlist')
+
+        const buttonDiv = create('div')
+        buttonDiv.className = 'searched-button-div'
+        buttonDiv.append(playButton, shuffleButton)
+        playlistElement.childNodes[1].append(buttonDiv)
+        searchPlaylists.append(playlistElement)        
+
+        searchPlaylists.append(playlistElement)
     })
 }
 

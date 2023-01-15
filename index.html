@@ -56,7 +56,7 @@
                 <div class="view-div" id="search-view">
                     <span class="view-title">Search</span>
                     <div id='search-container'>
-                        <input id="search-bar" type="text" placeholder="Search Spotify">
+                        <input id="search-bar" type="text" placeholder="Search Spotify" onfocus=toggleEnterListener(true) onblur=toggleEnterListener(false)>
                         <button id="submit-search" onclick=search()><i id="search-icon" class="fa-solid fa-magnifying-glass icon"></i></button>
                     </div>
                     <div id="change-search">
