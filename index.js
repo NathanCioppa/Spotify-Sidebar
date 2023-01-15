@@ -7,7 +7,7 @@ let info = {
     current: {
         data: '',
         track: 'Play something on Spotify',
-        artist: 'Then it will show up here',
+        artist: '',
         cover: 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg',
         link: '',
         position: '',
@@ -423,6 +423,7 @@ async function search() {
     const data = await get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track,album,artist,playlist`)
     console.log(data)
     showSearchTracks(data.tracks.items)
+    showSearchAlbums(data.albums.items)
 }
 
 //template for making elements displayed from a search
@@ -471,6 +472,37 @@ function showSearchTracks(tracks) {
 
         trackElement.childNodes[1].append(buttonDiv)
         searchTracks.append(trackElement)
+    })
+}
+
+function showSearchAlbums(albums) {
+    const searchAlbums = elem('show-search-albums')
+    searchAlbums.innerHTML = ''
+    albums.map(album => {
+        const albumElement = createSearchItems(album.name, album.artists[0].name, album.images[1].url)
+
+//creates and appends buttons to play the album in order or shuffled
+        const playButton = create('button')
+        playButton.className = 'searched-item-button'
+        playButton.title = 'Play album'
+        playButton.setAttribute('onclick', `playItem('${album.uri}',false)`)
+        const playButtonIcon = create('i')
+        playButtonIcon.className = 'fa-solid fa-play icon queue-icon'
+        playButton.append(playButtonIcon)
+
+        const shuffleButton = create('button')
+        shuffleButton.className = 'searched-item-button'
+        shuffleButton.title = 'Shuffle album'
+        shuffleButton.setAttribute('onclick', `playItem('${album.uri}',true)`)
+        const shuffleButtonicon = create('i')
+        shuffleButtonicon.className = 'fa-solid fa-shuffle icon queue-icon'
+        shuffleButton.append(shuffleButtonicon)
+
+        const buttonDiv = create('div')
+        buttonDiv.className = 'searched-button-div'
+        buttonDiv.append(playButton, shuffleButton)
+        albumElement.childNodes[1].append(buttonDiv)
+        searchAlbums.append(albumElement)
     })
 }
 

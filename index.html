@@ -9,13 +9,12 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://kit.fontawesome.com/066ac1bd3b.js" crossorigin="anonymous"></script></head>
 <body class="align-items" onload=pageLoad()>
-    <!--scopes: (add to end of link if more scopes are needed)
+    <div id="sign-in">
+        <!--scopes: (add to end of link if more scopes are needed)
         user-read-private user-read-email playlist-read-private 
         playlist-modify-public playlist-modify-private user-read-currently-playing
         user-read-playback-state user-modify-playback-state
-    -->
-
-    <div id="sign-in">
+        -->
         <a id="link" href="https://accounts.spotify.com/authorize?client_id=d91f06fc4f9841ef85a0aebcb7973751&redirect_uri=https://nathancioppa.github.io/spotify-app.html&response_type=token&scope=user-read-private user-read-email playlist-read-private playlist-modify-public playlist-modify-private user-read-currently-playing user-read-playback-state user-modify-playback-state">
         get authorization token
         </a>
