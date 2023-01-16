@@ -358,6 +358,16 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 #default-color:hover{
     cursor: pointer;
 }
+#change-icon-colors{
+    width: fit-content;
+    font-size: 2vh;
+    padding: 1vh;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 1vh;
+    margin: 0.5vh;
+}
 
 
 

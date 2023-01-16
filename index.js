@@ -31,6 +31,7 @@ let theme = {
     red: '75',
     green: '225',
     blue: '75',
+    iconColor: 'black',
     background: {
         direction:'to right',
     }
@@ -81,7 +82,7 @@ function pageLoad() {
         signIn()
     }
 
-//sets previous customization settings if there any in local storage
+//sets previous customization settings if there are any in local storage
     theme.background.direction = getLocal('gradient') !== null ? getLocal('gradient') : theme.background.direction
 
     if(getLocal('alignment') !== null) {document.body.style.alignItems = getLocal('alignment')}
@@ -111,6 +112,10 @@ function pageLoad() {
                 mapPreviousColors(savedColor)
             }
         }
+    }
+    if(getLocal('iconColor') !== null) {
+        theme.iconColor = getLocal('iconColor')
+        setIconColor(true)
     }
     changeGradientArrows()
 }
@@ -608,7 +613,7 @@ function setView(element) {
 
     for(let i = 0; i < buttons.length; i++) {
         const color = theme.color === '' ? theme.defautlColor : theme.color
-        buttons[i].style.color = buttons[i].id === selected.id ? color : 'black'
+        buttons[i].style.color = buttons[i].id === selected.id ? color : theme.iconColor
     }
 
     const views = elemClass('view-div')
@@ -746,6 +751,29 @@ function setBackground() {
     document.body.style.backgroundImage = `linear-gradient(${theme.background.direction}, rgb(20,20,20), rgba(${theme.red},${theme.green},${theme.blue}, 0.2))`
 }
 
+//set color for navbar and playback icons
+function setIconColor(pageLoad) {
+    const playback = elemClass('playback-icon')
+    for(let i = 0; i < playback.length; i++) {
+        playback[i].style.color = theme.iconColor
+    }
+    
+    const navIcons = elemClass('nav-icon')
+    for(let i = 0; i < navIcons.length; i++) {
+        navIcons[i].style.color = theme.iconColor
+    }
+
+    pageLoad ? elem('nav-bar-home').style.color = theme.color : elem('nav-bar-palette').style.color = theme.color
+}
+
+function switchIconColors() {
+    const color = elem('play-icon').style.color === 'white' ? 'black' : 'white'
+    theme.iconColor = color
+    setIconColor(false)
+
+    window.localStorage.setItem('iconColor', color)
+}
+
 //sets the theme to the default color
 function setDefaultColor() {
     theme.color = theme.defautlColor
@@ -762,7 +790,6 @@ function setDefaultColor() {
 }
 
 //converts an rgb color to a hexcolor
-//rgb colors are used to set the theme instead of hexcolors
 function rgbToHex(r, g, b){
     const red = Number(r) < 16 ? `0${Number(r).toString(16)}` : Number(r).toString(16)
     const green = Number(g) < 16 ? `0${Number(g).toString(16)}` : Number(g).toString(16)
@@ -818,7 +845,7 @@ function playbackAlign() {
     window.localStorage.setItem('playback-align', element.flexDirection)
 }
 
-//swaps the side of the app that the navbar is aliged to
+//swaps the side of the app that the navbar is aligned to
 function navbarAlign() {
     const element = elem('actions').style
     element.flexDirection = element.flexDirection === 'row-reverse' ? 'row' : 'row-reverse'
