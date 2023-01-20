@@ -22,10 +22,6 @@
         <button onclick=signIn()>Get started!</button>
     </div>
     
-    <div style="flex-direction: row; position: fixed;">
-            <button onclick=window.localStorage.clear()>clear storage</button>
-        </div>
-    
     <div id="app" class="align-items">
  
         <div>
@@ -44,6 +40,7 @@
                 <button onclick=setView(this) class="nav-button"><i id="nav-bar-search" class="fa-solid fa-magnifying-glass icon nav-icon"></i></button>
                 <button onclick=setView(this) class="nav-button"><i id="nav-bar-palette" class="fa-solid fa-palette icon nav-icon"></i></button>
                 <button onclick=setView(this) class="nav-button"><i id="nav-bar-settings" class="fa-solid fa-gears icon nav-icon"></i></button>
+                <button onclick=setView(this) class="nav-button"><i id="nav-bar-info" class="fa-solid fa-circle-info icon nav-icon"></i></button>
             </div>
             <div id="view">
                 <div class="view-div" id="home-view">
@@ -118,7 +115,7 @@
                     </div>
                     <div>
                         <span class="view-subtitle">Navbar / playback icon color:</span>
-                        <button id="change-icon-colors" onclick=switchIconColors()>Black</button>
+                        <button id="change-icon-colors" onclick=switchIconColors()>Switch to black</button>
                     </div>
                 </div>
                 <div class="view-div" id="settings-view">
@@ -136,6 +133,10 @@
                         <i id="align-playback" class="fa-solid fa-arrow-right-arrow-left icon align-icon"></i>
                     </button>
                 </div>
+                <div class="view-div" id="info-view">
+                    <span class="view-title">Information</span>
+                    <button onclick=window.localStorage.clear()>clear storage</button>
+                </div>
             </div>
         </div>
         <div id="currently-playing" >
@@ -144,7 +145,7 @@
                 <div id="current-details">
                     <div id="current-words">
                         <span id="current-track" title="">Play something on Spotify</span>
-                        <span id="current-artist">Then it will show up here</span>
+                        <span id="current-artist"></span>
                     </div>
                     <div id="playback">
                         <button class="playback-button" onclick=previous()><i class="fa-solid fa-backward-step playback-icon icon"></i></button>

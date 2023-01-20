@@ -12,6 +12,8 @@ let info = {
         link: '',
         position: '',
         length: '',
+        context: '',
+        contextName: '',
     },
     playlists:[],
     playback: {
@@ -117,7 +119,7 @@ function pageLoad() {
         theme.iconColor = getLocal('iconColor')
         setIconColor(true)
     }
-    changeGradientArrows()
+    elem('greeting').innerText = 'Good '+getGreeting()+','
 }
 
 async function signIn() {
@@ -150,6 +152,7 @@ async function signIn() {
         window.localStorage.removeItem('token')
         elem('token-input').value = ''
     }
+    getGreeting()
 }
 
 
@@ -172,6 +175,17 @@ async function getCurrent() {
             current.artist = data.item.artists[0].name
             current.cover = data.item.album.images[1].url
             current.link = data.item.external_urls.spotify
+
+            if(data.context !== null) {
+                current.context = data.context.type === 'album' ? data.item.album.album_type : data.context.type
+                const contextItem = await get(data.context.href)
+                current.contextName = contextItem.name
+            }
+            else{
+                current.context = 'browsing'
+                current.contextName = ''
+            }
+
             await checkForSkip(data.item.uri)
             await getQueue()
         }
@@ -764,6 +778,7 @@ function setIconColor(pageLoad) {
     }
 
     pageLoad ? elem('nav-bar-home').style.color = theme.color : elem('nav-bar-palette').style.color = theme.color
+    elem('change-icon-colors').innerText = theme.iconColor === 'white' ? 'Switch to black' : 'Switch to white'
 }
 
 function switchIconColors() {
