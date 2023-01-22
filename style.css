@@ -160,7 +160,7 @@ div {
 }
 #context{
     font-size: 3.2vh;
-    margin-bottom: 1vh;
+    margin-bottom: 2vh;
 }
 #context-image{
     width: 20vh;
@@ -183,6 +183,20 @@ div {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+#context-artist{
+    border-left: 1px solid white;
+    font-size: 2.3vh;
+    padding-left: 0.5vh;
+    margin: 0.5vh;
+    margin-left: 0;
+    width: 41vh;
+}
+#playing-animation{
+    background-color: transparent;
+    width: 3vh;
+    height: 3vh;
+    transform: rotate(180deg);
 }
 
 

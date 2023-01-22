@@ -16,6 +16,7 @@ let info = {
             type: '',
             name: '',
             image: '',
+            artist: ''
         }
     },
     playlists:[],
@@ -149,6 +150,7 @@ async function signIn() {
         showContent()
         setInterval(getCurrent, 1000)
         setInterval(getQueue, 5000)
+        setInterval(playAnimation, 1)
     } else {
 //token is removed from local storage and input is cleared if the user submits an invalid token
         console.log('invalid access token')
@@ -182,8 +184,10 @@ async function getCurrent() {
             if(data.context !== null) {
                 current.context.type = data.context.type === 'album' ? data.item.album.album_type : data.context.type
                 const contextItem = await get(data.context.href)
+                console.log(contextItem)
                 current.context.name = contextItem.name
                 current.context.image = contextItem.images[0].url
+                current.context.artist = current.context.type === 'playlist' ? 'By '+contextItem.owner.display_name : contextItem.artists[0].name
             }
             else{
                 current.context.type = 'browsing'
@@ -823,7 +827,7 @@ function updateHome() {
     const contextType = context.type.toLocaleLowerCase()
     const contextElem = elem('context')
     const header = contextType[0] === 'a' ? 'Listening to an ' : 'Listening to a '
-    contextElem.innerText = contextType !== 'browsing' ? header+contextType+':' : 'Browsing Spotify'
+    contextElem.innerText = contextType !== 'browsing' ? header+contextType : 'Browsing Spotify'
 
     const image = context.image
     const imageElem = elem('context-image')
@@ -833,6 +837,9 @@ function updateHome() {
     const nameElem = elem('context-name')
     nameElem.innerText = name
     nameElem.title = name
+
+    const artist = context.artist
+    elem('context-artist').innerText = artist
 }
 
 //reloads elements on the page that may be constantly changing
@@ -894,4 +901,48 @@ function navbarAlign() {
     element.flexDirection = element.flexDirection === 'row-reverse' ? 'row' : 'row-reverse'
 
     window.localStorage.setItem('navbar-align', element.flexDirection)
+}
+
+
+let called = false
+let leftHeight
+let middleHeight
+let rightHeight
+//if direction is positive, bars will move upwards, they will move downwards if negative
+let leftDirection = 1
+let middleDirection = 1
+let rightDirection = 1
+
+function playAnimation() {
+    const canvas = document.querySelector('#playing-animation')
+    const c = canvas.getContext('2d')
+    
+    const minHeight = canvas.height/5
+    const maxHeight = canvas.height
+    
+    if(!called) {
+        leftHeight = canvas.height
+        middleHeight = canvas.height/2
+        rightHeight = canvas.height/5
+        called = true
+    } else {
+        if(rightHeight > maxHeight || rightHeight < minHeight) {rightDirection = -rightDirection}
+        rightHeight += rightDirection
+
+        if(middleHeight > maxHeight || middleHeight < minHeight) {middleDirection = -middleDirection}
+        middleHeight += middleDirection
+
+        if(leftHeight > maxHeight || leftHeight < minHeight) {leftDirection = -leftDirection}
+        leftHeight += leftDirection
+    }
+
+    const collumWidth = canvas.width/5
+
+    c.beginPath()
+    c.clearRect(0,0,canvas.width,canvas.height)
+    c.fillStyle = theme.color
+    c.fillRect(collumWidth*0,0,collumWidth, rightHeight)
+    c.fillRect(collumWidth*2,0,collumWidth, middleHeight)
+    c.fillRect(collumWidth*4,0,collumWidth, leftHeight)
+    c.stroke()
 }
