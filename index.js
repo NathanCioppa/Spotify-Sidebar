@@ -12,8 +12,11 @@ let info = {
         link: '',
         position: '',
         length: '',
-        context: '',
-        contextName: '',
+        context: {
+            type: '',
+            name: '',
+            image: '',
+        }
     },
     playlists:[],
     playback: {
@@ -177,17 +180,19 @@ async function getCurrent() {
             current.link = data.item.external_urls.spotify
 
             if(data.context !== null) {
-                current.context = data.context.type === 'album' ? data.item.album.album_type : data.context.type
+                current.context.type = data.context.type === 'album' ? data.item.album.album_type : data.context.type
                 const contextItem = await get(data.context.href)
-                current.contextName = contextItem.name
+                current.context.name = contextItem.name
+                current.context.image = contextItem.images[0].url
             }
             else{
-                current.context = 'browsing'
-                current.contextName = ''
+                current.context.type = 'browsing'
+                current.context.name = ''
             }
 
             await checkForSkip(data.item.uri)
             await getQueue()
+            reloadContentsOnTrackChange()
         }
         current.length = data.item.duration_ms
         current.position = data.progress_ms
@@ -812,18 +817,41 @@ function rgbToHex(r, g, b){
     return '#'+red+green+blue
 }
 
-//reloads elements on the page that may be constantly changing, mainly the current track and playback elements
-//function is always called every second with the getCurrent() function, as well as when 
+function updateHome() {
+    const context = info.current.context
+
+    const contextType = context.type.toLocaleLowerCase()
+    const contextElem = elem('context')
+    const header = contextType[0] === 'a' ? 'Listening to an ' : 'Listening to a '
+    contextElem.innerText = contextType !== 'browsing' ? header+contextType+':' : 'Browsing Spotify'
+
+    const image = context.image
+    const imageElem = elem('context-image')
+    imageElem.src = image
+
+    const name = context.name
+    const nameElem = elem('context-name')
+    nameElem.innerText = name
+    nameElem.title = name
+}
+
+//reloads elements on the page that may be constantly changing
+//function is always called every second with the getCurrent() function, as well as when
 function reloadContents() {
     elem('greeting').innerText = 'Good '+getGreeting()+','
+    elem('play-icon').className = info.playback.playing ? 'fa-solid fa-pause playback-icon' : 'fa-solid fa-play playback-icon'
+    progressBar()
+}
+
+//reloads content on the page that should only change when a different track is played
+function reloadContentsOnTrackChange() {
+    updateHome()
     elem('current-track').innerText = info.current.track
     elem('current-track').title = info.current.track
     elem('current-link').href = info.current.link
     elem('current-image').src = info.current.cover
     elem('current-artist').innerText = info.current.artist
     elem('current-artist').title = info.current.artist
-    elem('play-icon').className = info.playback.playing ? 'fa-solid fa-pause playback-icon' : 'fa-solid fa-play playback-icon'
-    progressBar()
 }
 
 //shows the app and hides the sign in page once signed in, called upon signing in

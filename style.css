@@ -29,6 +29,9 @@ div {
     top: 10%;
     transform: translate(-50%);
 }
+.row{
+    flex-direction: row;
+}
 
 
 
@@ -151,6 +154,35 @@ div {
 }
 #home-view{
     display: flex;
+}
+#home-title{
+    margin-bottom: 0.5vh;
+}
+#context{
+    font-size: 3.2vh;
+    margin-bottom: 1vh;
+}
+#context-image{
+    width: 20vh;
+    height: 20vh;
+}
+#context-name-container{
+    width: 20vh;
+    height: 20vh;
+    margin-left: 1vh;
+    border-left: 1px solid white;
+}
+#context-name{
+    height: 14vh;
+    width: 19.5vh;
+    padding: 0.5vh;
+    font-size: 3vh;
+    font-weight: bold;
+    -webkit-line-clamp: 4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
