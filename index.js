@@ -184,14 +184,27 @@ async function getCurrent() {
             if(data.context !== null) {
                 current.context.type = data.context.type === 'album' ? data.item.album.album_type : data.context.type
                 const contextItem = await get(data.context.href)
-                console.log(contextItem)
                 current.context.name = contextItem.name
                 current.context.image = contextItem.images[0].url
-                current.context.artist = current.context.type === 'playlist' ? 'By '+contextItem.owner.display_name : contextItem.artists[0].name
-            }
-            else{
+                //current.context.artist = current.context.type === 'playlist' ? 'By '+contextItem.owner.display_name : contextItem.artists[0].name
+                switch (current.context.type) {
+                    case 'playlist':
+                        current.context.artist = 'By '+contextItem.owner.display_name
+                        break
+                    case 'artist':
+                        current.context.artist =''
+                        break
+                    default:
+                        current.context.artist = contextItem.artists[0].name
+                        break
+                }
+                elem('context-container').style.display = 'flex'
+            } else {
+                elem('context-container').style.display = 'none'
                 current.context.type = 'browsing'
                 current.context.name = ''
+                current.context.image = ''
+                current.context.artist = ''
             }
 
             await checkForSkip(data.item.uri)
@@ -205,13 +218,20 @@ async function getCurrent() {
     reloadContents()
 }
 
-async function toggleShuffle(shuffle) {
+//set shuffle perameter to true to start shuffleing, and false to stop
+//set swap perameter to true to change shuffle from what it is currently, shuffle perameter will be ignored
+async function toggleShuffle(shuffle, swap) {
+    if(swap) {
+        shuffle = !info.playback.shuffle ? true : false
+    }
+
     await fetch('https://api.spotify.com/v1/me/player/shuffle?state='+shuffle, {
         method: 'PUT',
         headers:{
             'Authorization' : 'Bearer ' + token
         }
     })
+    await getQueue()
 }
 
 async function getPlaylists() {
@@ -847,6 +867,14 @@ function updateHome() {
 function reloadContents() {
     elem('greeting').innerText = 'Good '+getGreeting()+','
     elem('play-icon').className = info.playback.playing ? 'fa-solid fa-pause playback-icon' : 'fa-solid fa-play playback-icon'
+    //elem('context-shuffle-icon').style.color = info.playback.shuffle === true ? theme.color : 'black'
+    if(info.playback.shuffle) {
+        elem('context-shuffle-icon').style.color = theme.color
+        elem('context-shuffle-icon').title = 'Press to disable shuffle'
+    } else {
+        elem('context-shuffle-icon').style.color = 'black'
+        elem('context-shuffle-icon').title = 'Press to enable shuffle'
+    }
     progressBar()
 }
 

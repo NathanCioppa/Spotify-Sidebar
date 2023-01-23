@@ -46,16 +46,21 @@
                 <div class="view-div" id="home-view">
                     <span class="view-title" id="home-title">Home</span>
                     <span id="context"></span>
-                    <div class="row">
+                    <div id="context-container" class="row">
                         <img id="context-image">
-                        <div id="context-name-container">
+                        <div id="context-info-container">
                             <span id="context-name"></span>
-                        </div>        
+                            <div class="row">
+                                <canvas id="playing-animation"></canvas>
+                                <button id="shuffle-toggle" onclick=toggleShuffle(true,true)>
+                                    <i id="context-shuffle-icon" class="fa-solid fa-shuffle icon toggle-shuffle-icon"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <span id="context-artist"></span>
                     </div>
-                    <canvas id="playing-animation"></canvas>
                 </div>
                 <div class="view-div" id="playlists-view">
                     <span class="view-title">Playlists</span>

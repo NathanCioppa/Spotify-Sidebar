@@ -166,11 +166,13 @@ div {
     width: 20vh;
     height: 20vh;
 }
-#context-name-container{
+#context-info-container{
     width: 20vh;
     height: 20vh;
     margin-left: 1vh;
     border-left: 1px solid white;
+    justify-content: space-evenly;
+
 }
 #context-name{
     height: 14vh;
@@ -194,9 +196,31 @@ div {
 }
 #playing-animation{
     background-color: transparent;
-    width: 3vh;
-    height: 3vh;
+    width: 4vh;
+    height: 4vh;
     transform: rotate(180deg);
+    margin: 1vh;
+    margin-bottom: 0.5vh;
+}
+#shuffle-toggle{
+    background-color: transparent;
+    border: none;
+    border-radius: 100vh;
+    width: 5.5vh;
+    height: 5.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1vh;
+}
+#shuffle-toggle:hover{
+    background-color: rgba(255, 255, 255, 0.1);
+}
+#shuffle-toggle:active{
+    background-color: rgba(255, 255, 255, 0.2)
+}
+.toggle-shuffle-icon{
+    font-size: 4vh;
 }
 
 
