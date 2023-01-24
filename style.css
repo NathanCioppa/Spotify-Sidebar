@@ -222,7 +222,58 @@ div {
 .toggle-shuffle-icon{
     font-size: 4vh;
 }
-
+#home-pins{
+    margin-top: 2.5vh;
+    width: 41vh;
+    max-height: 22vh;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.pinned-item{
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 18.5vh;
+    height: 5vh;
+    border-radius: 1vh;
+    margin-bottom: 1vh;
+    margin-right: 0.5vh;
+}
+.pin-image{
+    width: 5vh;
+    height: 5vh;
+    border-top-left-radius: 1vh;
+    border-bottom-left-radius: 1vh;
+}
+.pin-name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 15vh;
+    height: 2.5vh;
+    padding-left: 0.5vh;
+    font-size: 2vh;
+    white-space: nowrap;
+}
+.pin-buttons-container{
+    padding-left: 0.5vh;
+}
+.pin-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5vh;
+    height: 2.5vh;
+    border-radius: 0.5vh;
+    border: none;
+    background-color: transparent;
+}
+.pin-button:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.pin-button-icon{
+    font-size: 2vh;
+}
 
 
 .playlist{

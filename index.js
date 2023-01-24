@@ -770,6 +770,7 @@ function changeTheme(onPageLoad) {
 
     onPageLoad ? elem('nav-bar-home').style.color = color : elem('nav-bar-palette').style.color = color
     elem('sign-out').style.color = color
+    if(info.playback.shuffle) {elem('context-shuffle-icon').style.color = theme.color}
     setBackground()
     changeGradientArrows()
 }
