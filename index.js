@@ -27,6 +27,7 @@ let info = {
         queue: [],
         skip: []
     },
+    pins: []
 }
 
 //stores information about the users customization settings
@@ -240,8 +241,9 @@ async function getPlaylists() {
         const image = playlist.images[0] !== undefined ? playlist.images[0].url : 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg'
         const name = playlist.name
         const uri = playlist.uri
+        const href = playlist.href
         
-        info.playlists.push({image,name,uri})
+        info.playlists.push({image,name,uri,href})
     })
     showPlaylists()
 }
@@ -285,7 +287,12 @@ function showPlaylists() {
         shuffleIcon.className = 'fa-solid fa-shuffle icon playlist-button-icon'
         shuffleButton.append(shuffleIcon)
 
-        buttons.append(shuffleButton, playButton)
+        const pinButton = create('button')
+        pinButton.id = playlistInfo.href
+        pinButton.setAttribute('onclick', `addToPinsArray(this.id)`)
+        console.log(playlistInfo.name)
+
+        buttons.append(shuffleButton, playButton, pinButton)
         infoDiv.append(name, buttons)
         playlist.append(image, infoDiv)
 
@@ -360,6 +367,48 @@ function showQueue() {
         container.append(image, infoDiv)
         elem('queue').append(container)
     })
+}
+
+//constructs and returns a pin element
+function createPinElement(href, uri, name, image) {
+
+}
+
+//adds pins to the info.pins array and sets them to local storage each time a new pin is made
+async function addToPinsArray(itemHref) {
+    let add = true
+    const item = await get(itemHref)
+
+    const name = item.name
+    const uri = item.uri
+    const image = item.images[1] !== undefined ? item.images[1].url : 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg'
+
+//cheks if the item is pinned already, does not pin again if so
+    info.pins.map(pin => {
+        if(pin.uri === uri) {add = false}
+    })
+    if(add) {
+        info.pins.push({itemHref, uri, image, name})
+
+//append pin to homescreen
+        createPinElement(itemHref, uri, name, image)
+    }
+    
+//br seperates each part of the item when it is set to local storage, 
+//so each part is seperated and easily accessable by slicing the string later
+    const br = ' B~R '
+    let i = 0
+    while(i<info.pins.length) {
+        localStorage.setItem('pin-'+i, info.pins[i].itemHref+br+uri+br+image+br+name)
+        console.log(localStorage.getItem('pin-'+i))
+        i++
+    }
+    console.log(info.pins)
+}
+
+//removes pin from info.pins, local storage, and removes the element from the homescreen
+function removePin(pinHref) {
+
 }
 
 async function next() {
