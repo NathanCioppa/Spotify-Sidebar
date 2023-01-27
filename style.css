@@ -146,6 +146,25 @@ div {
     text-overflow: ellipsis;
     font-weight: bold;
 }
+.pin-to-home-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    width: 2.5vh;
+    height: 2.5vh;
+    border-radius: 100vh;
+    align-self: center;
+}
+.pin-to-home-button:hover{
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.pin-icon{
+    color: white;
+    font-size: 1.5vh;
+    transform: rotate(30deg);
+}
 
 
 
@@ -239,6 +258,7 @@ div {
     border-radius: 1vh;
     margin-bottom: 1vh;
     margin-right: 0.5vh;
+    border: 1px solid black;
 }
 .pin-image{
     width: 5vh;
@@ -249,7 +269,7 @@ div {
 .pin-name{
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 15vh;
+    width: 13vh;
     height: 2.5vh;
     padding-left: 0.5vh;
     font-size: 2vh;
@@ -273,6 +293,7 @@ div {
 }
 .pin-button-icon{
     font-size: 2vh;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 

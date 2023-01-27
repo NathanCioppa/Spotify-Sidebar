@@ -287,10 +287,7 @@ function showPlaylists() {
         shuffleIcon.className = 'fa-solid fa-shuffle icon playlist-button-icon'
         shuffleButton.append(shuffleIcon)
 
-        const pinButton = create('button')
-        pinButton.id = playlistInfo.href
-        pinButton.setAttribute('onclick', `addToPinsArray(this.id)`)
-        console.log(playlistInfo.name)
+        const pinButton = createPinButton(playlistInfo.href)
 
         buttons.append(shuffleButton, playButton, pinButton)
         infoDiv.append(name, buttons)
@@ -369,9 +366,70 @@ function showQueue() {
     })
 }
 
-//constructs and returns a pin element
-function createPinElement(href, uri, name, image) {
+//creates and returns a button that pins an item based off its href
+function createPinButton(href) {
+    const pinButton = create('button')
+    pinButton.id = href
+    pinButton.className = 'pin-to-home-button'
+    pinButton.setAttribute('onclick', `addToPinsArray(this.id)`)
 
+    const pinButtonIcon = create('i')
+    pinButtonIcon.className = 'fa-solid fa-thumbtack icon pin-icon'
+
+    pinButton.append(pinButtonIcon)
+
+    return pinButton
+}
+
+function createPinnedItemButton(iconClass, title){
+    const button = create('button')
+    button.className = 'pin-button'
+    button.title = title
+    
+    const icon = create('i')
+    icon.className = iconClass
+
+    button.append(icon)
+    return button
+}
+
+//constructs and returns a pin element
+function createPinElement(href, uri, name, image, type) {
+    console.log(href)
+    const container = create('div')
+    container.id = href
+    container.className = 'pinned-item row'
+
+    const pinImage = create('img')
+    pinImage.src = image
+    pinImage.className = 'pin-image'
+
+    const separator = create('div')
+
+    const pinName = create('span')
+    pinName.innerText = name
+    pinName.title = name
+    pinName.className = 'pin-name'
+
+    const buttonContainer = create('div')
+    buttonContainer.className = '"pin-buttons-container row'
+
+    const playButton = createPinnedItemButton('fa-solid fa-play pin-button-icon icon', 'Play')
+    playButton.setAttribute('onclick', `playItem('${uri}',false)`)
+
+    const shuffleButton = createPinnedItemButton('fa-solid fa-shuffle icon pin-button-icon', 'Shuffle')
+    shuffleButton.setAttribute('onclick', `playItem('${uri}', true)`)
+
+    const queueButton = createPinnedItemButton('fa-solid fa-arrow-up-short-wide icon pin-button-icon', 'Add to Queue')
+    queueButton.setAttribute('onclick', `nextInQueue('${uri}')`)
+
+    console.log(type)
+//pinned tracks will only be given the queue and remove pin button, other items can be played or shuffled
+    type !== 'track' ? buttonContainer.append(playButton, shuffleButton) : buttonContainer.append(queueButton)
+    separator.append(pinName, buttonContainer)
+    container.append(pinImage,separator)
+
+    elem('home-pins').append(container)
 }
 
 //adds pins to the info.pins array and sets them to local storage each time a new pin is made
@@ -381,7 +439,8 @@ async function addToPinsArray(itemHref) {
 
     const name = item.name
     const uri = item.uri
-    const image = item.images[1] !== undefined ? item.images[1].url : 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg'
+    const type = item.type
+    const image = type === 'track' ? item.album.images[0].url : item.images[0] !== undefined ? item.images[0].url : 'https://www.hypebot.com/wp-content/uploads/2019/11/spotify-1759471_1920.jpg'
 
 //cheks if the item is pinned already, does not pin again if so
     info.pins.map(pin => {
@@ -391,19 +450,21 @@ async function addToPinsArray(itemHref) {
         info.pins.push({itemHref, uri, image, name})
 
 //append pin to homescreen
-        createPinElement(itemHref, uri, name, image)
+        createPinElement(itemHref, uri, name, image, type)
     }
     
+//stored pins are cleared first so that there wont be any duplicates as they are removed and added
+    for(let i = 0; i<localStorage.length; i++) {
+        localStorage.removeItem('pin-'+i)
+    }
+
 //br seperates each part of the item when it is set to local storage, 
-//so each part is seperated and easily accessable by slicing the string later
+//so each part is seperated and accessable by slicing the string later
     const br = ' B~R '
-    let i = 0
-    while(i<info.pins.length) {
+    for(let i=0;i<info.pins.length;i++) {
         localStorage.setItem('pin-'+i, info.pins[i].itemHref+br+uri+br+image+br+name)
         console.log(localStorage.getItem('pin-'+i))
-        i++
     }
-    console.log(info.pins)
 }
 
 //removes pin from info.pins, local storage, and removes the element from the homescreen
@@ -536,7 +597,7 @@ async function search() {
 }
 
 //template for making elements displayed from a search
-function createSearchItems(name, artist, imageUrl) {
+function createSearchItems(name, artist, imageUrl, href) {
     const container = create('div')
     container.className = 'searched-item'
 
@@ -604,10 +665,12 @@ function showSearchTracks(tracks) {
         const queueNextButtonIcon = create('i')
         queueNextButtonIcon.className = 'fa-solid fa-arrow-up-short-wide icon queue-icon'
         queueNextButton.append(queueNextButtonIcon)
+
+        const pinButton = createPinButton(track.href)
         
         const buttonDiv = create('div')
         buttonDiv.className = 'searched-button-div'
-        buttonDiv.append(queueNextButton)
+        buttonDiv.append(queueNextButton, pinButton)
 
         trackElement.childNodes[1].append(buttonDiv)
         searchTracks.append(trackElement)
@@ -625,7 +688,10 @@ function showSearchAlbums(albums) {
 
         const buttonDiv = create('div')
         buttonDiv.className = 'searched-button-div'
-        buttonDiv.append(playButton, shuffleButton)
+
+        const pinButton = createPinButton(album.href)
+
+        buttonDiv.append(playButton, shuffleButton, pinButton)
         albumElement.childNodes[1].append(buttonDiv)
         searchAlbums.append(albumElement)
     })
@@ -648,10 +714,11 @@ function showSearchArtists(artists) {
 
         const playButton = createSearchPlayButton(artist.uri, 'artist')
         const shuffleButton = createSearchShuffleButton(artist.uri, 'artist')
+        const pinButton = createPinButton(artist.href)
         
         const buttonDiv = create('div')
         buttonDiv.className = 'searched-button-div'
-        buttonDiv.append(playButton, shuffleButton)
+        buttonDiv.append(playButton, shuffleButton, pinButton)
         artistElement.childNodes[1].append(buttonDiv)
         searchArtists.append(artistElement)
     })
@@ -666,10 +733,11 @@ function showSearchPlaylists(playlists) {
 
         const playButton = createSearchPlayButton(playlist.uri, 'playlist')
         const shuffleButton = createSearchShuffleButton(playlist.uri, 'playlist')
+        const pinButton = createPinButton(playlist.href)
 
         const buttonDiv = create('div')
         buttonDiv.className = 'searched-button-div'
-        buttonDiv.append(playButton, shuffleButton)
+        buttonDiv.append(playButton, shuffleButton,pinButton)
         playlistElement.childNodes[1].append(buttonDiv)
         searchPlaylists.append(playlistElement)        
 
