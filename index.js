@@ -170,10 +170,12 @@ async function signIn() {
                 pin = pin.slice(pin.indexOf(br)+br.length, pin.length)
 
                 const name = pin
+                const type = uri.slice(uri.indexOf(':')+1, uri.lastIndexOf(':'))
+                console.log(type)
 
                 info.pins.push({href,uri,image,name})
                 
-                createPinElement(href, uri, name, image, uri.slice(uri.indexOf(':'), uri.lastIndexOf(':')))
+                createPinElement(href, uri, name, image, type)
             }
         }
 
