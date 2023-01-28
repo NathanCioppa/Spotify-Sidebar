@@ -272,6 +272,7 @@ div {
     width: 13vh;
     height: 2.5vh;
     padding-left: 0.5vh;
+    padding-top: 0.25vh;
     font-size: 2vh;
     white-space: nowrap;
 }
@@ -294,6 +295,10 @@ div {
 .pin-button-icon{
     font-size: 2vh;
     color: rgba(255, 255, 255, 0.9);
+}
+.remove-pin-icon{
+    font-size: 1vh;
+    transform: rotate(30deg);
 }
 
 

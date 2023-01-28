@@ -152,6 +152,31 @@ async function signIn() {
         setInterval(getCurrent, 1000)
         setInterval(getQueue, 5000)
         setInterval(playAnimation, 1)
+
+//sets pins from local storage to info.pins and displays them
+        for(let i=0; i<localStorage.length; i++) {
+            const br = ' B~R '
+            let pin = localStorage.getItem('pin-'+i)
+//retrive information from stored pins by slicing the string
+            if(pin !== null) {
+                const href = pin.slice(0,pin.indexOf(br))
+                pin = pin.slice(pin.indexOf(br)+br.length, pin.length)
+                console.log(href)
+
+                const uri = pin.slice(0,pin.indexOf(br))
+                pin = pin.slice(pin.indexOf(br)+br.length, pin.length)
+
+                const image = pin.slice(0,pin.indexOf(br))
+                pin = pin.slice(pin.indexOf(br)+br.length, pin.length)
+
+                const name = pin
+
+                info.pins.push({href,uri,image,name})
+                
+                createPinElement(href, uri, name, image, uri.slice(uri.indexOf(':'), uri.lastIndexOf(':')))
+            }
+        }
+
     } else {
 //token is removed from local storage and input is cleared if the user submits an invalid token
         console.log('invalid access token')
@@ -395,7 +420,6 @@ function createPinnedItemButton(iconClass, title){
 
 //constructs and returns a pin element
 function createPinElement(href, uri, name, image, type) {
-    console.log(href)
     const container = create('div')
     container.id = href
     container.className = 'pinned-item row'
@@ -423,9 +447,12 @@ function createPinElement(href, uri, name, image, type) {
     const queueButton = createPinnedItemButton('fa-solid fa-arrow-up-short-wide icon pin-button-icon', 'Add to Queue')
     queueButton.setAttribute('onclick', `nextInQueue('${uri}')`)
 
-    console.log(type)
+    const deleteButton = createPinnedItemButton('fa-solid fa-thumbtack icon pin-button-icon remove-pin-icon','Remove pin')
+    deleteButton.setAttribute('onclick',`removePin(this)`)
+
 //pinned tracks will only be given the queue and remove pin button, other items can be played or shuffled
     type !== 'track' ? buttonContainer.append(playButton, shuffleButton) : buttonContainer.append(queueButton)
+    buttonContainer.append(deleteButton)
     separator.append(pinName, buttonContainer)
     container.append(pinImage,separator)
 
@@ -433,9 +460,9 @@ function createPinElement(href, uri, name, image, type) {
 }
 
 //adds pins to the info.pins array and sets them to local storage each time a new pin is made
-async function addToPinsArray(itemHref) {
+async function addToPinsArray(href) {
     let add = true
-    const item = await get(itemHref)
+    const item = await get(href)
 
     const name = item.name
     const uri = item.uri
@@ -447,10 +474,10 @@ async function addToPinsArray(itemHref) {
         if(pin.uri === uri) {add = false}
     })
     if(add) {
-        info.pins.push({itemHref, uri, image, name})
+        info.pins.push({href, uri, image, name})
 
 //append pin to homescreen
-        createPinElement(itemHref, uri, name, image, type)
+        createPinElement(href, uri, name, image, type)
     }
     
 //stored pins are cleared first so that there wont be any duplicates as they are removed and added
@@ -462,14 +489,25 @@ async function addToPinsArray(itemHref) {
 //so each part is seperated and accessable by slicing the string later
     const br = ' B~R '
     for(let i=0;i<info.pins.length;i++) {
-        localStorage.setItem('pin-'+i, info.pins[i].itemHref+br+uri+br+image+br+name)
-        console.log(localStorage.getItem('pin-'+i))
+        const pin = info.pins[i]
+        localStorage.setItem('pin-'+i, pin.href+br+pin.uri+br+pin.image+br+pin.name)
     }
 }
 
 //removes pin from info.pins, local storage, and removes the element from the homescreen
-function removePin(pinHref) {
+function removePin(pinnedItem) {
+    const removeId = pinnedItem.parentElement.parentElement.parentElement.id
+    const selectedPin = elem(removeId)
 
+    selectedPin.parentElement.removeChild(selectedPin)
+    info.pins = info.pins.filter(item => item.itemHref !== removeId)
+
+    for(let i = 0; i<localStorage.length; i++) {
+        const item = localStorage.getItem('pin-'+i)
+        if(item !== null && item.includes(removeId)) {
+            localStorage.removeItem('pin-'+i)
+        }
+    }
 }
 
 async function next() {
