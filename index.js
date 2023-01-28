@@ -127,6 +127,10 @@ function pageLoad() {
     elem('greeting').innerText = 'Good '+getGreeting()+','
 }
 
+let intervalCurrent
+let intervalQueue
+let intervalAnimation
+
 async function signIn() {
     const inputToken = document.getElementById('token-input').value
 
@@ -149,9 +153,9 @@ async function signIn() {
         getPlaylists()
         getCurrent()
         showContent()
-        setInterval(getCurrent, 1000)
-        setInterval(getQueue, 5000)
-        setInterval(playAnimation, 1)
+        intervalCurrent= setInterval(getCurrent, 1000)
+        intervalQueue= setInterval(getQueue, 5000)
+        intervalAnimation= setInterval(playAnimation, 1)
 
 //sets pins from local storage to info.pins and displays them
         for(let i=0; i<localStorage.length; i++) {
@@ -1060,7 +1064,15 @@ function signOut() {
     window.localStorage.removeItem('token')
     elem('app').style.display='none'
     elem('sign-in').style.display='flex'
+
+    clearInterval(intervalAnimation)
+    clearInterval(intervalCurrent)
+    clearInterval(intervalQueue)
     
+    elem('home-pins').innerHTML = ''
+
+    info.playlists = []
+    elem('playlists').innerHTML = ''
 }
 
 //switches the side of the window that the entire app is aligned to

@@ -16,10 +16,10 @@
         user-read-playback-state user-modify-playback-state
         -->
         <a id="link" href="https://accounts.spotify.com/authorize?client_id=d91f06fc4f9841ef85a0aebcb7973751&redirect_uri=https://nathancioppa.github.io/spotify-app.html&response_type=token&scope=user-read-private user-read-email playlist-read-private playlist-modify-public playlist-modify-private user-read-currently-playing user-read-playback-state user-modify-playback-state">
-        get authorization token
+        Get authorization token
         </a>
         <input id="token-input" type="text" placeholder="Input token here">
-        <button onclick=signIn()>Get started!</button>
+        <button id="start" onclick=signIn()>Get started!</button>
     </div>
     
     <div id="app" class="align-items">
