@@ -1,4 +1,3 @@
-this is still a work in progress
 
 This project is web app which allows users to easily control their Spotify playback using Spotify's API in a window designed to be resized and displayed on the side of the screen.
 
