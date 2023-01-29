@@ -165,7 +165,6 @@ async function signIn() {
             if(pin !== null) {
                 const href = pin.slice(0,pin.indexOf(br))
                 pin = pin.slice(pin.indexOf(br)+br.length, pin.length)
-                console.log(href)
 
                 const uri = pin.slice(0,pin.indexOf(br))
                 pin = pin.slice(pin.indexOf(br)+br.length, pin.length)
@@ -175,17 +174,20 @@ async function signIn() {
 
                 const name = pin
                 const type = uri.slice(uri.indexOf(':')+1, uri.lastIndexOf(':'))
-                console.log(type)
 
                 info.pins.push({href,uri,image,name})
                 
                 createPinElement(href, uri, name, image, type)
             }
         }
+        elem('token-input').style.border = 'none'
 
     } else {
 //token is removed from local storage and input is cleared if the user submits an invalid token
         console.log('invalid access token')
+        if(getLocal('token') === null) {
+            elem('token-input').style.border = '1px solid red'
+        }
         window.localStorage.removeItem('token')
         elem('token-input').value = ''
     }
@@ -193,7 +195,7 @@ async function signIn() {
 }
 
 async function generateRefershToken() {
-    window.alert("this feature doesn't actually do anything, i gave up on making it because i've been working on this project for a month now and i want to do somthing new. 01-28-23 22:44")
+    window.alert("this feature doesn't actually do anything, i gave up on making it because i've been working on this project for a month now and i want to do somthing new. 01-28-23 22:44 check out my awesome playlist https://open.spotify.com/playlist/1TZIWjlnrJLOUf78lBYqKE")
 }
 
 

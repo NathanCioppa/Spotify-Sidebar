@@ -10,7 +10,12 @@
     <script src="https://kit.fontawesome.com/066ac1bd3b.js" crossorigin="anonymous"></script></head>
 <body class="align-items" onload=pageLoad()>
     <div id="sign-in">
-        <!--scopes: (add to end of link if more scopes are needed)
+        <!--
+        replace client_id and redirect_uri with the appropriate information from your own 
+        spotify application if you want i guess no one else will probably read this and 
+        its probably in the readme file in more detail anyway.
+            
+        scopes:
         user-read-private user-read-email playlist-read-private 
         playlist-modify-public playlist-modify-private user-read-currently-playing
         user-read-playback-state user-modify-playback-state
@@ -167,9 +172,11 @@
                 </div>
                 <div class="view-div" id="info-view">
                     <span class="view-title">Information</span>
-                    <p id="description"> .Due to limitations with Spotify's API, many features of this app are only usable 
-                        by Spotify Premium users. Authorization tokens expire after 1 hour. Sign out and get another token 
-                        once it expires, or modify the app on your own to use a refersh token from Spotify instead. <br>
+                    <p id="description">If the app stops working for some reason, signing out and back in usually does the 
+                        trick. Check the DevTools console for errors. Due to limitations with Spotify's API, many features 
+                        of this app are only usable by Spotify Premium users. Authorization tokens expire after 1 hour. 
+                        Sign out and get another token once it expires, or modify the app on your own to use a refersh token
+                         from Spotify instead. <br>
                         <a id="github-link" href="https://github.com/NathanCioppa/Spotify-Sidebar">More information on GitHub</a>
 
                     </p>
