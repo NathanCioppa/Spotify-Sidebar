@@ -192,6 +192,13 @@ async function signIn() {
     getGreeting()
 }
 
+const clientId = 'd91f06fc4f9841ef85a0aebcb7973751'
+
+async function generateRefershToken() {
+    const clientSecret = elem('input-secret').value
+    
+}
+
 
 //gets the currently playing track and sets its information in the info object
 async function getCurrent() {
@@ -1099,6 +1106,12 @@ function navbarAlign() {
     element.flexDirection = element.flexDirection === 'row-reverse' ? 'row' : 'row-reverse'
 
     window.localStorage.setItem('navbar-align', element.flexDirection)
+}
+
+function clearLocalStorage() {
+    if(confirm("This will clear the window's local storage, reseting the app to its default settigs next time the window is loaded.")) {
+        window.localStorage.clear()
+    }
 }
 
 

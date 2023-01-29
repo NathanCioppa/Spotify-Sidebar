@@ -692,3 +692,55 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     height: 2px;
     background-color: rgba(255, 255, 255, 0.2);
 }
+
+
+#clear-storage{
+    color: white;
+    width: fit-content;
+    padding: 1vh;
+    border-radius: 100vh;
+    font-size: 2vh;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    margin-top: 2vh;
+}
+#clear-storage:hover{
+    background-color: rgba(255, 0, 0, 0.5);
+}
+#description{
+    font-size: 2vh;
+}
+#github-link{
+    color: rgb(75, 255, 75);
+}
+#input-secret{
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    font-size: 2vh;
+    height: 3vh;
+    width: 30vh;
+    color: white;
+    font-family: monospace;
+}
+#input-secret:focus{
+    outline: 1px solid white;
+}
+#input-secret::placeholder{
+    font-family: sans-serif;
+    color: rgba(255, 255, 255, 0.5);
+}
+#submit-secret{
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    height: 4vh;
+    width: 9.5vh;
+    font-size: 2vh;
+    border-radius: 100vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    margin-top: 0.5vh;
+}
+#submit-secret:hover{
+    background-color: rgba(255, 255, 255, 0.3);
+}

@@ -167,7 +167,18 @@
                 </div>
                 <div class="view-div" id="info-view">
                     <span class="view-title">Information</span>
-                    <button onclick=window.localStorage.clear()>clear storage</button>
+                    <p id="description"> .Due to limitations with Spotify's API, many features of this app are only usable 
+                        by Spotify Premium users. Authorization tokens expire after 1 hour. Sign out and get another token 
+                        once it expires, or modify the app on your own to use a refersh token from Spotify instead. <br>
+                        <a id="github-link" href="https://github.com/NathanCioppa/Spotify-Sidebar">More information on GitHub</a>
+
+                    </p>
+                    <span class="view-subtitle">Use client secret to get refresh token:</span>
+                    <div class="row" style="justify-content: space-between; align-items: center;">
+                        <input id="input-secret" placeholder="Input client secret" type="text">
+                        <button onclick=generateRefershToken() id="submit-secret">Submit</button>
+                    </div>
+                    <button id="clear-storage" onclick=clearLocalStorage()>Clear local storage</button>
                 </div>
             </div>
         </div>
