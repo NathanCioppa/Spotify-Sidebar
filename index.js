@@ -192,11 +192,8 @@ async function signIn() {
     getGreeting()
 }
 
-const clientId = 'd91f06fc4f9841ef85a0aebcb7973751'
-
 async function generateRefershToken() {
-    const clientSecret = elem('input-secret').value
-    
+    window.alert("this feature doesn't actually do anything, i gave up on making it because i've been working on this project for a month now and i want to do somthing new. 01-28-23 22:44")
 }
 
 
